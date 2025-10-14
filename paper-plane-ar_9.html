@@ -8,7 +8,10 @@
         <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
-        <script src="https://unpkg.com/lucide@latest"></script>
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0"
+        />
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
             @import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap");
@@ -53,7 +56,12 @@
                 top: 32px;
                 left: 50%;
                 transform: translateX(-50%);
-                z-index: 100;
+                z-index: 140;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                pointer-events: none;
             }
 
             .brand img {
@@ -62,259 +70,257 @@
                 filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
             }
 
-            .gesture-indicator {
-                position: absolute;
-                top: 80px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(14, 14, 14, 0.45);
-                backdrop-filter: blur(18px);
-                border: 1px solid rgba(255, 255, 255, 0.16);
-                border-radius: 14px;
-                padding: 8px 14px;
-                color: white;
-                font-weight: 600;
+            .brand-subtitle {
                 font-size: 13px;
-                z-index: 100;
-                transition: all 0.3s;
+                letter-spacing: 0.4px;
+                color: rgba(255, 255, 255, 0.75);
+            }
+
+            .material-symbols-rounded {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+                font-variation-settings:
+                    "FILL" 1,
+                    "wght" 400,
+                    "GRAD" 0,
+                    "opsz" 24;
+            }
+
+            .status-indicator {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                width: 168px;
+                padding: 8px 16px;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.12);
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                font-weight: 600;
+                color: rgba(255, 255, 255, 0.85);
+                transition: all 0.3s ease;
+            }
+
+            .status-indicator .status-label {
+                font-size: 13px;
+                letter-spacing: 0.2px;
+            }
+
+            .status-indicator.success {
+                background: rgba(34, 197, 94, 0.18);
+                border-color: rgba(74, 222, 128, 0.35);
+                color: #34d399;
+            }
+
+            .status-indicator.info {
+                background: rgba(59, 130, 246, 0.18);
+                border-color: rgba(96, 165, 250, 0.35);
+                color: #60a5fa;
+            }
+
+            .status-indicator.highlight {
+                background: rgba(251, 191, 36, 0.18);
+                border-color: rgba(251, 191, 36, 0.4);
+                color: #fbbf24;
+            }
+
+            .status-indicator.neutral {
+                background: rgba(255, 255, 255, 0.12);
+                border-color: rgba(255, 255, 255, 0.18);
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            body.boarding .status-indicator {
+                opacity: 0;
+                transform: translateY(-12px);
+                pointer-events: none;
+            }
+
+            .boarding-screen {
+                position: fixed;
+                inset: 0;
+                background: #000;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 120;
                 opacity: 0;
                 pointer-events: none;
+                gap: 140px;
+                transition: opacity 0.4s ease;
+            }
+
+            body.boarding .boarding-screen {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .boarding-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 28px;
+                text-align: center;
+            }
+
+            .primary-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                padding: 16px 36px;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.12);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: white;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .primary-btn:hover {
+                background: rgba(255, 255, 255, 0.18);
+                transform: translateY(-2px);
+                box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+            }
+
+            .bottom-ui {
+                position: fixed;
+                bottom: 24px;
+                left: 0;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 18px;
+                z-index: 130;
+            }
+
+            .bottom-actions {
+                display: flex;
+                gap: 12px;
+                pointer-events: auto;
+            }
+
+            body.boarding .bottom-actions {
+                display: none;
+            }
+
+            .glass-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                padding: 12px 20px;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.18);
+                border: 1px solid rgba(255, 255, 255, 0.28);
+                color: white;
+                font-weight: 600;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .glass-btn:hover {
+                background: rgba(255, 255, 255, 0.24);
+                transform: translateY(-1px);
+            }
+
+            .glass-btn.record {
+                background: rgba(248, 113, 113, 0.16);
+                border-color: rgba(248, 113, 113, 0.35);
+                color: #fca5a5;
+            }
+
+            .glass-btn.record .material-symbols-rounded {
+                color: currentColor;
+            }
+
+            .glass-btn.record.recording {
+                background: rgba(239, 68, 68, 0.25);
+                border-color: rgba(239, 68, 68, 0.55);
+                color: #f87171;
+            }
+
+            .gesture-legend {
+                display: flex;
+                gap: 18px;
+                padding: 12px 24px;
+                border-radius: 999px;
+                background: rgba(15, 23, 42, 0.35);
+                border: 1px solid rgba(255, 255, 255, 0.16);
+                backdrop-filter: blur(18px);
+                pointer-events: none;
+            }
+
+            body.boarding .gesture-legend {
+                background: rgba(0, 0, 0, 0.65);
+                border-color: rgba(255, 255, 255, 0.2);
+            }
+
+            .gesture-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 6px;
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 12px;
+                transition: all 0.3s ease;
+            }
+
+            .gesture-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                border: 1px solid rgba(255, 255, 255, 0.22);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.08);
+                color: rgba(255, 255, 255, 0.9);
+            }
+
+            .gesture-item.active .gesture-icon {
+                background: rgba(59, 130, 246, 0.28);
+                border-color: rgba(59, 130, 246, 0.5);
+                color: #bfdbfe;
+                transform: translateY(-2px);
+            }
+
+            .gesture-item.active span:last-child {
+                color: #f8fafc;
+            }
+
+            .status-toast {
+                position: fixed;
+                bottom: 120px;
+                left: 50%;
+                transform: translateX(-50%);
+                padding: 10px 18px;
+                border-radius: 999px;
+                background: rgba(14, 14, 14, 0.78);
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                color: white;
+                font-weight: 600;
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
+                opacity: 0;
+                pointer-events: none;
+                transition:
+                    opacity 0.3s ease,
+                    transform 0.3s ease;
+                z-index: 135;
             }
 
-            .gesture-indicator.show {
+            .status-toast.show {
                 opacity: 1;
-            }
-
-            .gesture-indicator .indicator-chip {
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                padding: 4px 10px;
-                border-radius: 999px;
-                background: rgba(255, 255, 255, 0.06);
-                border: 1px solid rgba(255, 255, 255, 0.12);
-                line-height: 1;
-            }
-
-            .gesture-indicator .indicator-chip.state {
-                background: rgba(255, 255, 255, 0.02);
-                border-color: rgba(255, 255, 255, 0.09);
-            }
-
-            .gesture-indicator svg {
-                width: 16px;
-                height: 16px;
-            }
-
-            .record-btn {
-                position: absolute;
-                bottom: 40px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: rgba(255, 255, 255, 0.2);
-                backdrop-filter: blur(20px);
-                border: 2px solid rgba(255, 255, 255, 0.3);
-                border-radius: 60px;
-                padding: 14px 32px;
-                color: white;
-                font-weight: 500;
-                font-size: 15px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                z-index: 100;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            }
-
-            .record-btn:hover {
-                background: rgba(255, 255, 255, 0.25);
-                transform: translateX(-50%) scale(1.05);
-            }
-
-            .record-btn.recording {
-                background: rgba(239, 68, 68, 0.25);
-                border-color: rgba(239, 68, 68, 0.5);
-            }
-
-            .record-btn.recording .rec-dot {
-                animation: pulse 1.5s ease-in-out infinite;
-            }
-
-            @keyframes pulse {
-                0%,
-                100% {
-                    opacity: 1;
-                    transform: scale(1);
-                }
-                50% {
-                    opacity: 0.6;
-                    transform: scale(1.1);
-                }
-            }
-
-            .rec-dot {
-                width: 12px;
-                height: 12px;
-                background: #ef4444;
-                border-radius: 50%;
-            }
-
-            .help-btn {
-                position: absolute;
-                top: 32px;
-                right: 32px;
-                width: 48px;
-                height: 48px;
-                background: rgba(255, 255, 255, 0.2);
-                backdrop-filter: blur(20px);
-                border: 2px solid rgba(255, 255, 255, 0.3);
-                border-radius: 50%;
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 100;
-                transition: all 0.3s;
-            }
-
-            .help-btn:hover {
-                background: rgba(255, 255, 255, 0.3);
-                transform: scale(1.1);
-            }
-
-            .controls-popup {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background: rgba(0, 0, 0, 0.8);
-                backdrop-filter: blur(10px);
-                z-index: 200;
-                display: none;
-                align-items: center;
-                justify-content: center;
-                animation: fadeIn 0.3s;
-            }
-
-            .controls-popup.show {
-                display: flex;
-            }
-
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            .controls-content {
-                background: rgba(40, 40, 40, 0.95);
-                backdrop-filter: blur(20px);
-                border-radius: 24px;
-                padding: 32px;
-                max-width: 500px;
-                width: 90%;
-                border: 2px solid rgba(255, 255, 255, 0.1);
-                animation: slideUp 0.3s;
-            }
-
-            @keyframes slideUp {
-                from {
-                    transform: translateY(20px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateY(0);
-                    opacity: 1;
-                }
-            }
-
-            .controls-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 24px;
-            }
-
-            .controls-title {
-                color: white;
-                font-size: 24px;
-                font-weight: 700;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .controls-title svg {
-                width: 24px;
-                height: 24px;
-            }
-
-            .close-btn {
-                width: 36px;
-                height: 36px;
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 50%;
-                color: white;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.2s;
-            }
-
-            .close-btn:hover {
-                background: rgba(255, 255, 255, 0.2);
-            }
-
-            .control-item {
-                display: flex;
-                align-items: center;
-                gap: 16px;
-                padding: 16px;
-                background: rgba(255, 255, 255, 0.05);
-                border-radius: 12px;
-                margin-bottom: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
-            }
-
-            .control-icon {
-                width: 48px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .control-icon svg {
-                width: 24px;
-                height: 24px;
-            }
-
-            .control-text {
-                flex: 1;
-                color: white;
-            }
-
-            .control-text strong {
-                display: block;
-                font-weight: 600;
-                margin-bottom: 4px;
-                font-size: 15px;
-            }
-
-            .control-text span {
-                color: rgba(255, 255, 255, 0.7);
-                font-size: 13px;
+                transform: translate(-50%, -12px);
             }
 
             .loading {
@@ -362,108 +368,68 @@
 
         <div class="brand">
             <img src="assets/logo-air.svg" alt="Kraken Airlines logo" />
+            <p class="brand-subtitle">made æspecially for you</p>
+            <div class="status-indicator neutral" id="statusIndicator">
+                <span class="material-symbols-rounded">flight_takeoff</span>
+                <span class="status-label">Boarding</span>
+            </div>
         </div>
 
-        <button class="help-btn" id="helpBtn">
-            <i data-lucide="help-circle" size="24"></i>
-        </button>
-
-        <div
-            style="
-                position: absolute;
-                top: 32px;
-                left: 32px;
-                display: flex;
-                gap: 12px;
-                z-index: 100;
-            "
-        >
-            <button
-                class="help-btn"
-                id="launchBtn"
-                style="width: auto; padding: 0 20px; border-radius: 24px"
-            >
-                <span style="font-size: 14px; font-weight: 600">Launch</span>
-            </button>
-            <button
-                class="help-btn"
-                id="landBtn"
-                style="width: auto; padding: 0 20px; border-radius: 24px"
-            >
-                <span style="font-size: 14px; font-weight: 600">Land</span>
-            </button>
+        <div class="boarding-screen" id="boardingScreen">
+            <div class="boarding-content">
+                <button class="primary-btn" id="takeoffBtn">
+                    <span class="material-symbols-rounded">flight_takeoff</span>
+                    <span class="label">Flight Takeoff</span>
+                </button>
+            </div>
         </div>
 
-        <div class="gesture-indicator" id="gestureIndicator"></div>
-
-        <div class="controls-popup" id="controlsPopup">
-            <div class="controls-content">
-                <div class="controls-header">
-                    <div class="controls-title">
-                        <i data-lucide="hand"></i>
-                        Gesture Controls
+        <div class="bottom-ui">
+            <div class="bottom-actions">
+                <button class="glass-btn" id="backToBoardingBtn">
+                    <span class="material-symbols-rounded">mail</span>
+                    <span class="label">Back to Boarding</span>
+                </button>
+                <button class="glass-btn record" id="recordBtn">
+                    <span class="material-symbols-rounded">fiber_manual_record</span>
+                    <span class="label">Record</span>
+                </button>
+            </div>
+            <div class="gesture-legend">
+                <div class="gesture-item" data-gesture="pinch">
+                    <div class="gesture-icon">
+                        <span class="material-symbols-rounded">pan_tool_alt</span>
                     </div>
-                    <button class="close-btn" id="closeBtn">
-                        <i data-lucide="x" size="20"></i>
-                    </button>
+                    <span>Drag</span>
                 </div>
-
-                <div class="control-item">
-                    <div class="control-icon">
-                        <i data-lucide="hand"></i>
+                <div class="gesture-item" data-gesture="pointing">
+                    <div class="gesture-icon">
+                        <span class="material-symbols-rounded">near_me</span>
                     </div>
-                    <div class="control-text">
-                        <strong>Pinch</strong>
-                        <span>Drag plane anywhere</span>
-                    </div>
+                    <span>Direction</span>
                 </div>
-
-                <div class="control-item">
-                    <div class="control-icon">
-                        <i data-lucide="mouse-pointer"></i>
+                <div class="gesture-item" data-gesture="peace">
+                    <div class="gesture-icon">
+                        <span class="material-symbols-rounded">auto_awesome</span>
                     </div>
-                    <div class="control-text">
-                        <strong>Point (Index Finger)</strong>
-                        <span>Guide plane direction smoothly</span>
-                    </div>
+                    <span>Trick</span>
                 </div>
-
-                <div class="control-item">
-                    <div class="control-icon">
-                        <i data-lucide="sparkles"></i>
+                <div class="gesture-item" data-gesture="fist">
+                    <div class="gesture-icon">
+                        <span class="material-symbols-rounded">zoom_in</span>
                     </div>
-                    <div class="control-text">
-                        <strong>Peace Sign</strong>
-                        <span>Barrel roll trick</span>
-                    </div>
+                    <span>In</span>
                 </div>
-
-                <div class="control-item">
-                    <div class="control-icon">
-                        <i data-lucide="zoom-out"></i>
+                <div class="gesture-item" data-gesture="open_palm">
+                    <div class="gesture-icon">
+                        <span class="material-symbols-rounded">zoom_out</span>
                     </div>
-                    <div class="control-text">
-                        <strong>Open Palm</strong>
-                        <span>Zoom out (increase orbit)</span>
-                    </div>
-                </div>
-
-                <div class="control-item">
-                    <div class="control-icon">
-                        <i data-lucide="zoom-in"></i>
-                    </div>
-                    <div class="control-text">
-                        <strong>Fist</strong>
-                        <span>Zoom in (decrease orbit)</span>
-                    </div>
+                    <span>Out</span>
                 </div>
             </div>
         </div>
 
-        <button class="record-btn" id="recordBtn">
-            <div class="rec-dot"></div>
-            <span>Record</span>
-        </button>
+        <div class="status-toast" id="statusToast"></div>
 
         <script type="module">
             // Three.js Setup
@@ -543,7 +509,7 @@
                 TRICK: "trick",
             };
 
-            let currentState = PlaneState.ORBITING;
+            let currentState = PlaneState.IDLE;
             let planeVelocity = new THREE.Vector3(0, 0, 0);
             let targetDirection = new THREE.Vector3(0, 0, -1);
             let targetDistance = 12; // Distance from center
@@ -552,77 +518,98 @@
             let smoothedHandX = 0;
             let smoothedHandY = 0;
 
-            // Gesture display
-            function buildIndicatorMarkup(chips = []) {
-                return chips
-                    .filter((chip) => chip && chip.label)
-                    .map((chip) => {
-                        const iconMarkup = chip.icon ? `<i data-lucide="${chip.icon}"></i>` : "";
-                        const variantClass = chip.variant ? ` ${chip.variant}` : "";
-                        return `<span class="indicator-chip${variantClass}">${iconMarkup}<span>${chip.label}</span></span>`;
-                    })
-                    .join("");
+            document.body.classList.remove("in-flight");
+            document.body.classList.add("boarding");
+
+            const statusIndicator = document.getElementById("statusIndicator");
+            const statusToast = document.getElementById("statusToast");
+            const gestureLegendItems = document.querySelectorAll(".gesture-item");
+            const takeoffBtn = document.getElementById("takeoffBtn");
+            const backToBoardingBtn = document.getElementById("backToBoardingBtn");
+            const recordBtn = document.getElementById("recordBtn");
+
+            const statusConfig = {
+                [PlaneState.IDLE]: {
+                    label: "Boarding",
+                    icon: "flight_takeoff",
+                    variant: "neutral",
+                },
+                [PlaneState.ORBITING]: {
+                    label: "On Flight",
+                    icon: "flight",
+                    variant: "success",
+                },
+                [PlaneState.DRAGGING]: {
+                    label: "Drag",
+                    icon: "pan_tool_alt",
+                    variant: "neutral",
+                },
+                [PlaneState.CONTROLLED]: {
+                    label: "Manual",
+                    icon: "sports_esports",
+                    variant: "info",
+                },
+                [PlaneState.TRICK]: {
+                    label: "Trick",
+                    icon: "auto_awesome",
+                    variant: "highlight",
+                },
+            };
+
+            function materialIcon(name) {
+                return `<span class="material-symbols-rounded">${name}</span>`;
             }
 
-            function renderIndicator(chips = []) {
-                const indicator = document.getElementById("gestureIndicator");
-                if (!indicator) {
+            function updateStatusIndicator() {
+                if (!statusIndicator) {
                     return;
                 }
+                const config = statusConfig[currentState] || statusConfig[PlaneState.IDLE];
+                statusIndicator.className = `status-indicator ${config.variant}`;
+                statusIndicator.innerHTML = `${materialIcon(config.icon)}<span class="status-label">${config.label}</span>`;
+            }
 
-                const markup = buildIndicatorMarkup(chips);
-                if (!markup) {
-                    indicator.classList.remove("show");
-                    indicator.innerHTML = "";
+            function setActiveGesture(gesture) {
+                gestureLegendItems.forEach((item) => {
+                    item.classList.toggle("active", item.dataset.gesture === gesture);
+                });
+            }
+
+            function updateGestureDisplay(gesture) {
+                if (!gesture || gesture === "none") {
+                    setActiveGesture("");
+                } else {
+                    setActiveGesture(gesture);
+                }
+            }
+
+            function showToast(chip) {
+                if (!statusToast) {
                     return;
                 }
-
-                indicator.innerHTML = markup;
-                indicator.classList.add("show");
-                if (window.lucide?.createIcons) {
-                    window.lucide.createIcons({ node: indicator });
+                if (!chip) {
+                    statusToast.classList.remove("show");
+                    statusToast.innerHTML = "";
+                    return;
                 }
+                statusToast.innerHTML = `${materialIcon(chip.icon)}<span>${chip.label}</span>`;
+                statusToast.classList.add("show");
+                setTimeout(() => {
+                    if (statusToast.innerText.includes(chip.label)) {
+                        statusToast.classList.remove("show");
+                    }
+                }, 2000);
             }
 
-            function updateGestureDisplay(gesture, progress = null) {
-                const chips = [];
-
-                switch (gesture) {
-                    case "pinch":
-                        chips.push({ icon: "hand", label: "Dragging" });
-                        break;
-                    case "pointing":
-                        chips.push({ icon: "mouse-pointer", label: "Directing" });
-                        break;
-                    case "peace":
-                        chips.push({ icon: "sparkles", label: "Trick Mode" });
-                        break;
-                    case "open_palm":
-                        chips.push({ icon: "zoom-out", label: "Zoom Out" });
-                        break;
-                    case "fist":
-                        chips.push({ icon: "zoom-in", label: "Zoom In" });
-                        break;
-                    default:
-                        break;
+            function setPlaneState(nextState) {
+                if (currentState === nextState) {
+                    return;
                 }
-
-                switch (currentState) {
-                    case PlaneState.ORBITING:
-                        chips.push({ icon: "plane", label: "On Flight", variant: "state" });
-                        break;
-                    case PlaneState.CONTROLLED:
-                        chips.push({ icon: "gamepad-2", label: "Manual", variant: "state" });
-                        break;
-                    case PlaneState.TRICK:
-                        chips.push({ icon: "sparkles", label: "Trick", variant: "state" });
-                        break;
-                    default:
-                        break;
-                }
-
-                renderIndicator(chips);
+                currentState = nextState;
+                updateStatusIndicator();
             }
+
+            updateStatusIndicator();
 
             // Trail System
             const trailPoints = [];
@@ -639,9 +626,9 @@
 
             function updateTrail() {
                 if (
-                    currentState === PlaneState.FLYING ||
+                    currentState === PlaneState.ORBITING ||
                     currentState === PlaneState.CONTROLLED ||
-                    currentState === PlaneState.LOOPING
+                    currentState === PlaneState.TRICK
                 ) {
                     trailPoints.push(planeGroup.position.clone());
                 }
@@ -741,6 +728,14 @@
             }
 
             function onResults(results) {
+                if (document.body.classList.contains("boarding")) {
+                    handDetected = false;
+                    gestureType = "none";
+                    updateGestureDisplay("none");
+                    setPlaneState(PlaneState.IDLE);
+                    return;
+                }
+
                 if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
                     const landmarks = results.multiHandLandmarks[0];
 
@@ -761,22 +756,20 @@
                     updateGestureDisplay(gestureType);
 
                     // Pinch - enter drag mode
-                    if (gestureType === "pinch" && currentState !== PlaneState.DRAGGING) {
-                        currentState = PlaneState.DRAGGING;
-                    } else if (gestureType !== "pinch" && currentState === PlaneState.DRAGGING) {
-                        currentState = PlaneState.ORBITING;
+                    if (gestureType === "pinch") {
+                        setPlaneState(PlaneState.DRAGGING);
+                    } else if (currentState === PlaneState.DRAGGING) {
+                        setPlaneState(PlaneState.ORBITING);
                     }
 
                     // Pointing - enter controlled mode
                     if (gestureType === "pointing") {
-                        if (currentState === PlaneState.ORBITING) {
-                            currentState = PlaneState.CONTROLLED;
-                        }
+                        setPlaneState(PlaneState.CONTROLLED);
                     } else if (
                         currentState === PlaneState.CONTROLLED &&
                         gestureType !== "pointing"
                     ) {
-                        currentState = PlaneState.ORBITING;
+                        setPlaneState(PlaneState.ORBITING);
                     }
 
                     // Peace - trick
@@ -801,48 +794,25 @@
                     handDetected = false;
                     gestureType = "none";
                     updateGestureDisplay("none");
-                    if (
+                    if (document.body.classList.contains("boarding")) {
+                        setPlaneState(PlaneState.IDLE);
+                    } else if (
                         currentState === PlaneState.DRAGGING ||
                         currentState === PlaneState.CONTROLLED
                     ) {
-                        currentState = PlaneState.ORBITING;
+                        setPlaneState(PlaneState.ORBITING);
                     }
                 }
             }
 
             function doTrick() {
-                currentState = PlaneState.TRICK;
-                showIndicator({ icon: "rotate-cw", label: "Barrel Roll!" });
+                setPlaneState(PlaneState.TRICK);
+                showToast({ icon: "autorenew", label: "Barrel Roll!" });
                 setTimeout(() => {
                     if (currentState === PlaneState.TRICK) {
-                        currentState = PlaneState.ORBITING;
+                        setPlaneState(PlaneState.ORBITING);
                     }
                 }, 1500);
-            }
-
-            function showIndicator(chip) {
-                const indicator = document.getElementById("gestureIndicator");
-                if (!indicator) {
-                    return;
-                }
-
-                const markup = buildIndicatorMarkup(chip ? [chip] : []);
-                indicator.innerHTML = markup;
-                if (markup) {
-                    indicator.classList.add("show");
-                    if (window.lucide?.createIcons) {
-                        window.lucide.createIcons({ node: indicator });
-                    }
-                } else {
-                    indicator.classList.remove("show");
-                }
-
-                setTimeout(() => {
-                    if (indicator.innerHTML === markup) {
-                        indicator.classList.remove("show");
-                        indicator.innerHTML = "";
-                    }
-                }, 2000);
             }
 
             // Camera Setup
@@ -865,46 +835,37 @@
                     loadingEl.innerHTML = `
                 <div style="color: #ef4444; text-align: center;">
                     <div style="margin-bottom: 16px; display: flex; justify-content: center;">
-                        <i data-lucide="camera" style="width: 48px; height: 48px;"></i>
+                        <span class="material-symbols-rounded" style="font-size: 48px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;">videocam_off</span>
                     </div>
                     <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
                     <div style="font-size: 14px; opacity: 0.8;">Please allow camera access to use this app</div>
                     <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
                 </div>
             `;
-                    if (window.lucide?.createIcons) {
-                        window.lucide.createIcons({ node: loadingEl });
-                    }
                 });
 
             // UI Controls
-            document.getElementById("helpBtn").addEventListener("click", () => {
-                document.getElementById("controlsPopup").classList.add("show");
+            takeoffBtn.addEventListener("click", () => {
+                document.body.classList.remove("boarding");
+                document.body.classList.add("in-flight");
+                setPlaneState(PlaneState.ORBITING);
+                updateGestureDisplay("none");
+                showToast({ icon: "flight_takeoff", label: "Flight Takeoff" });
             });
 
-            document.getElementById("launchBtn").addEventListener("click", () => {
-                if (currentState === PlaneState.IDLE || currentState === PlaneState.DRAGGING) {
-                    currentState = PlaneState.ORBITING;
-                    showIndicator({ icon: "rocket", label: "Plane launched!" });
-                }
-            });
-
-            document.getElementById("landBtn").addEventListener("click", () => {
-                if (currentState !== PlaneState.IDLE) {
-                    currentState = PlaneState.IDLE;
-                    trailPoints.length = 0;
-                    showIndicator({ icon: "plane-landing", label: "Plane landed" });
-                }
-            });
-
-            document.getElementById("closeBtn").addEventListener("click", () => {
-                document.getElementById("controlsPopup").classList.remove("show");
-            });
-
-            document.getElementById("controlsPopup").addEventListener("click", (e) => {
-                if (e.target.id === "controlsPopup") {
-                    document.getElementById("controlsPopup").classList.remove("show");
-                }
+            backToBoardingBtn.addEventListener("click", () => {
+                document.body.classList.remove("in-flight");
+                document.body.classList.add("boarding");
+                setPlaneState(PlaneState.IDLE);
+                updateGestureDisplay("none");
+                handDetected = false;
+                gestureType = "none";
+                trailPoints.length = 0;
+                targetDistance = 12;
+                orbitAngle = 0;
+                planeGroup.position.set(0, 0, 0);
+                planeGroup.rotation.set(0, 0, 0);
+                showToast({ icon: "mail", label: "Back to Boarding" });
             });
 
             // Screen Recording with MP4 support
@@ -912,7 +873,7 @@
             let recordedChunks = [];
             let isRecording = false;
 
-            document.getElementById("recordBtn").addEventListener("click", async () => {
+            recordBtn.addEventListener("click", async () => {
                 if (!isRecording) {
                     try {
                         const recordCanvas = document.createElement("canvas");
@@ -976,9 +937,15 @@
                         mediaRecorder.start();
                         isRecording = true;
 
-                        const btn = document.getElementById("recordBtn");
-                        btn.classList.add("recording");
-                        btn.querySelector("span").textContent = "Stop";
+                        recordBtn.classList.add("recording");
+                        const icon = recordBtn.querySelector(".material-symbols-rounded");
+                        const label = recordBtn.querySelector(".label");
+                        if (icon) {
+                            icon.textContent = "stop_circle";
+                        }
+                        if (label) {
+                            label.textContent = "Stop";
+                        }
                     } catch (err) {
                         console.error("Recording error:", err);
                     }
@@ -986,9 +953,15 @@
                     mediaRecorder.stop();
                     isRecording = false;
 
-                    const btn = document.getElementById("recordBtn");
-                    btn.classList.remove("recording");
-                    btn.querySelector("span").textContent = "Record";
+                    recordBtn.classList.remove("recording");
+                    const icon = recordBtn.querySelector(".material-symbols-rounded");
+                    const label = recordBtn.querySelector(".label");
+                    if (icon) {
+                        icon.textContent = "fiber_manual_record";
+                    }
+                    if (label) {
+                        label.textContent = "Record";
+                    }
                 }
             });
 
@@ -1129,7 +1102,6 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
 
-            lucide.createIcons();
             animate();
         </script>
     </body>
