@@ -88,6 +88,13 @@
                     "opsz" 24;
             }
 
+            .glass-surface {
+                background: rgba(15, 23, 42, 0.32);
+                border: 1px solid rgba(255, 255, 255, 0.28);
+                backdrop-filter: blur(22px);
+                box-shadow: 0 18px 36px rgba(15, 23, 42, 0.22);
+            }
+
             .status-indicator {
                 display: inline-flex;
                 align-items: center;
@@ -96,8 +103,6 @@
                 width: 168px;
                 padding: 8px 16px;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.12);
-                border: 1px solid rgba(255, 255, 255, 0.18);
                 font-weight: 600;
                 color: rgba(255, 255, 255, 0.85);
                 transition: all 0.3s ease;
@@ -109,26 +114,24 @@
             }
 
             .status-indicator.success {
-                background: rgba(34, 197, 94, 0.18);
-                border-color: rgba(74, 222, 128, 0.35);
+                background: rgba(34, 197, 94, 0.22);
+                border-color: rgba(74, 222, 128, 0.45);
                 color: #34d399;
             }
 
             .status-indicator.info {
-                background: rgba(59, 130, 246, 0.18);
-                border-color: rgba(96, 165, 250, 0.35);
+                background: rgba(59, 130, 246, 0.22);
+                border-color: rgba(96, 165, 250, 0.45);
                 color: #60a5fa;
             }
 
             .status-indicator.highlight {
-                background: rgba(251, 191, 36, 0.18);
-                border-color: rgba(251, 191, 36, 0.4);
+                background: rgba(251, 191, 36, 0.22);
+                border-color: rgba(251, 191, 36, 0.48);
                 color: #fbbf24;
             }
 
             .status-indicator.neutral {
-                background: rgba(255, 255, 255, 0.12);
-                border-color: rgba(255, 255, 255, 0.18);
                 color: rgba(255, 255, 255, 0.9);
             }
 
@@ -173,8 +176,6 @@
                 gap: 10px;
                 padding: 16px 36px;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.12);
-                border: 1px solid rgba(255, 255, 255, 0.3);
                 color: white;
                 font-size: 16px;
                 font-weight: 600;
@@ -217,8 +218,6 @@
                 gap: 8px;
                 padding: 12px 20px;
                 border-radius: 999px;
-                background: rgba(255, 255, 255, 0.18);
-                border: 1px solid rgba(255, 255, 255, 0.28);
                 color: white;
                 font-weight: 600;
                 font-size: 14px;
@@ -231,9 +230,15 @@
                 transform: translateY(-1px);
             }
 
+            .glass-btn:disabled,
+            .glass-btn.busy {
+                opacity: 0.55;
+                cursor: wait;
+            }
+
             .glass-btn.record {
-                background: rgba(248, 113, 113, 0.16);
-                border-color: rgba(248, 113, 113, 0.35);
+                background: rgba(248, 113, 113, 0.18);
+                border-color: rgba(248, 113, 113, 0.45);
                 color: #fca5a5;
             }
 
@@ -242,8 +247,8 @@
             }
 
             .glass-btn.record.recording {
-                background: rgba(239, 68, 68, 0.25);
-                border-color: rgba(239, 68, 68, 0.55);
+                background: rgba(239, 68, 68, 0.28);
+                border-color: rgba(239, 68, 68, 0.6);
                 color: #f87171;
             }
 
@@ -252,15 +257,12 @@
                 gap: 18px;
                 padding: 12px 24px;
                 border-radius: 999px;
-                background: rgba(15, 23, 42, 0.35);
-                border: 1px solid rgba(255, 255, 255, 0.16);
-                backdrop-filter: blur(18px);
                 pointer-events: none;
             }
 
             body.boarding .gesture-legend {
                 background: rgba(0, 0, 0, 0.65);
-                border-color: rgba(255, 255, 255, 0.2);
+                border-color: rgba(255, 255, 255, 0.32);
             }
 
             .gesture-item {
@@ -285,6 +287,25 @@
                 color: rgba(255, 255, 255, 0.9);
             }
 
+            .gesture-icon svg {
+                width: 26px;
+                height: 26px;
+            }
+
+            .gesture-icon path,
+            .gesture-icon circle {
+                stroke: currentColor;
+                stroke-width: 1.9;
+                fill: none;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            .gesture-icon .filled {
+                fill: currentColor;
+                stroke: none;
+            }
+
             .gesture-item.active .gesture-icon {
                 background: rgba(59, 130, 246, 0.28);
                 border-color: rgba(59, 130, 246, 0.5);
@@ -294,33 +315,6 @@
 
             .gesture-item.active span:last-child {
                 color: #f8fafc;
-            }
-
-            .status-toast {
-                position: fixed;
-                bottom: 120px;
-                left: 50%;
-                transform: translateX(-50%);
-                padding: 10px 18px;
-                border-radius: 999px;
-                background: rgba(14, 14, 14, 0.78);
-                border: 1px solid rgba(255, 255, 255, 0.14);
-                color: white;
-                font-weight: 600;
-                display: inline-flex;
-                align-items: center;
-                gap: 8px;
-                opacity: 0;
-                pointer-events: none;
-                transition:
-                    opacity 0.3s ease,
-                    transform 0.3s ease;
-                z-index: 135;
-            }
-
-            .status-toast.show {
-                opacity: 1;
-                transform: translate(-50%, -12px);
             }
 
             .loading {
@@ -369,7 +363,7 @@
         <div class="brand">
             <img src="assets/logo-air.svg" alt="Kraken Airlines logo" />
             <p class="brand-subtitle">made æspecially for you</p>
-            <div class="status-indicator neutral" id="statusIndicator">
+            <div class="status-indicator neutral glass-surface" id="statusIndicator">
                 <span class="material-symbols-rounded">flight_takeoff</span>
                 <span class="status-label">Boarding</span>
             </div>
@@ -377,7 +371,7 @@
 
         <div class="boarding-screen" id="boardingScreen">
             <div class="boarding-content">
-                <button class="primary-btn" id="takeoffBtn">
+                <button class="primary-btn glass-surface" id="takeoffBtn">
                     <span class="material-symbols-rounded">flight_takeoff</span>
                     <span class="label">Flight Takeoff</span>
                 </button>
@@ -386,50 +380,97 @@
 
         <div class="bottom-ui">
             <div class="bottom-actions">
-                <button class="glass-btn" id="backToBoardingBtn">
+                <button class="glass-btn glass-surface" id="backToBoardingBtn">
                     <span class="material-symbols-rounded">mail</span>
                     <span class="label">Back to Boarding</span>
                 </button>
-                <button class="glass-btn record" id="recordBtn">
+                <button class="glass-btn glass-surface" id="cameraToggleBtn">
+                    <span class="material-symbols-rounded">cameraswitch</span>
+                    <span class="label">Rear Camera</span>
+                </button>
+                <button class="glass-btn glass-surface record" id="recordBtn">
                     <span class="material-symbols-rounded">fiber_manual_record</span>
                     <span class="label">Record</span>
                 </button>
             </div>
-            <div class="gesture-legend">
+            <div class="gesture-legend glass-surface">
                 <div class="gesture-item" data-gesture="pinch">
                     <div class="gesture-icon">
-                        <span class="material-symbols-rounded">pan_tool_alt</span>
+                        <svg
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                            class="gesture-svg gesture-pinch"
+                        >
+                            <path d="M12 6v11" />
+                            <path d="M12 17l8-6" />
+                            <circle cx="20" cy="11.8" r="1.6" />
+                            <path d="M20 12c2.2 0 4 1.8 4 4v6" />
+                        </svg>
                     </div>
                     <span>Drag</span>
                 </div>
                 <div class="gesture-item" data-gesture="pointing">
                     <div class="gesture-icon">
-                        <span class="material-symbols-rounded">near_me</span>
+                        <svg
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                            class="gesture-svg gesture-point"
+                        >
+                            <path d="M16 6v12" />
+                            <path d="M12 12v10" />
+                            <path d="M20 15v8" />
+                            <path d="M12 22c0 2.6 1.9 4.7 4.5 4.7h1c2.6 0 4.5-2.1 4.5-4.7V20" />
+                        </svg>
                     </div>
                     <span>Direction</span>
                 </div>
                 <div class="gesture-item" data-gesture="peace">
                     <div class="gesture-icon">
-                        <span class="material-symbols-rounded">auto_awesome</span>
+                        <svg
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                            class="gesture-svg gesture-peace"
+                        >
+                            <path d="M14 6v11" />
+                            <path d="M18 6v11" />
+                            <path d="M11 13.5v8.5c0 2.8 2.1 5 4.9 5H18c2.5 0 4.5-2 4.5-4.5v-5.5" />
+                        </svg>
                     </div>
                     <span>Trick</span>
                 </div>
                 <div class="gesture-item" data-gesture="fist">
                     <div class="gesture-icon">
-                        <span class="material-symbols-rounded">zoom_in</span>
+                        <svg
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                            class="gesture-svg gesture-fist"
+                        >
+                            <path
+                                class="filled"
+                                d="M11 14v6.5c0 4.1 3.2 7.5 7.2 7.5h0.7c3.6 0 6.6-3 6.6-6.6V17c0-1.7-1.3-3-3-3h-1v-2.4c0-1.7-1.3-3-3-3s-3 1.3-3 3V14h-1.5c-1.6 0-3 1.3-3 3Z"
+                            />
+                        </svg>
                     </div>
                     <span>In</span>
                 </div>
                 <div class="gesture-item" data-gesture="open_palm">
                     <div class="gesture-icon">
-                        <span class="material-symbols-rounded">zoom_out</span>
+                        <svg
+                            viewBox="0 0 32 32"
+                            aria-hidden="true"
+                            class="gesture-svg gesture-open"
+                        >
+                            <path d="M9.5 9v11" />
+                            <path d="M13 6.5v13.5" />
+                            <path d="M17 6v14" />
+                            <path d="M21 7.5v12.5" />
+                            <path d="M24.5 12v8c0 3.3-2.7 6-6 6H16c-3.3 0-6-2.7-6-6v-4" />
+                        </svg>
                     </div>
                     <span>Out</span>
                 </div>
             </div>
         </div>
-
-        <div class="status-toast" id="statusToast"></div>
 
         <script type="module">
             // Three.js Setup
@@ -522,11 +563,11 @@
             document.body.classList.add("boarding");
 
             const statusIndicator = document.getElementById("statusIndicator");
-            const statusToast = document.getElementById("statusToast");
             const gestureLegendItems = document.querySelectorAll(".gesture-item");
             const takeoffBtn = document.getElementById("takeoffBtn");
             const backToBoardingBtn = document.getElementById("backToBoardingBtn");
             const recordBtn = document.getElementById("recordBtn");
+            const cameraToggleBtn = document.getElementById("cameraToggleBtn");
 
             const statusConfig = {
                 [PlaneState.IDLE]: {
@@ -565,7 +606,7 @@
                     return;
                 }
                 const config = statusConfig[currentState] || statusConfig[PlaneState.IDLE];
-                statusIndicator.className = `status-indicator ${config.variant}`;
+                statusIndicator.className = `status-indicator glass-surface ${config.variant}`;
                 statusIndicator.innerHTML = `${materialIcon(config.icon)}<span class="status-label">${config.label}</span>`;
             }
 
@@ -581,24 +622,6 @@
                 } else {
                     setActiveGesture(gesture);
                 }
-            }
-
-            function showToast(chip) {
-                if (!statusToast) {
-                    return;
-                }
-                if (!chip) {
-                    statusToast.classList.remove("show");
-                    statusToast.innerHTML = "";
-                    return;
-                }
-                statusToast.innerHTML = `${materialIcon(chip.icon)}<span>${chip.label}</span>`;
-                statusToast.classList.add("show");
-                setTimeout(() => {
-                    if (statusToast.innerText.includes(chip.label)) {
-                        statusToast.classList.remove("show");
-                    }
-                }, 2000);
             }
 
             function setPlaneState(nextState) {
@@ -807,7 +830,6 @@
 
             function doTrick() {
                 setPlaneState(PlaneState.TRICK);
-                showToast({ icon: "autorenew", label: "Barrel Roll!" });
                 setTimeout(() => {
                     if (currentState === PlaneState.TRICK) {
                         setPlaneState(PlaneState.ORBITING);
@@ -816,33 +838,77 @@
             }
 
             // Camera Setup
-            const cameraInstance = new Camera(videoElement, {
-                onFrame: async () => {
-                    await hands.send({ image: videoElement });
-                },
-                width: 1280,
-                height: 720,
-            });
+            let cameraInstance;
+            let currentFacingMode = "environment";
+            let cameraStarting = false;
 
-            cameraInstance
-                .start()
-                .then(() => {
-                    document.getElementById("loading").style.display = "none";
-                })
-                .catch((err) => {
-                    console.error("Camera error:", err);
-                    const loadingEl = document.getElementById("loading");
-                    loadingEl.innerHTML = `
+            function renderCameraError() {
+                const loadingEl = document.getElementById("loading");
+                loadingEl.innerHTML = `
                 <div style="color: #ef4444; text-align: center;">
-                    <div style="margin-bottom: 16px; display: flex; justify-content: center;">
+                    <div style='margin-bottom: 16px; display: flex; justify-content: center;'>
                         <span class="material-symbols-rounded" style="font-size: 48px; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;">videocam_off</span>
                     </div>
-                    <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
-                    <div style="font-size: 14px; opacity: 0.8;">Please allow camera access to use this app</div>
-                    <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
+                    <div style='font-size: 18px; margin-bottom: 8px;'>Camera Access Required</div>
+                    <div style='font-size: 14px; opacity: 0.8;'>Please allow camera access to use this app</div>
+                    <button onclick='location.reload()' style='margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;'>Retry</button>
                 </div>
             `;
+            }
+
+            function updateCameraToggleLabel() {
+                if (!cameraToggleBtn) {
+                    return;
+                }
+                const label = cameraToggleBtn.querySelector(".label");
+                if (label) {
+                    label.textContent =
+                        currentFacingMode === "user" ? "Front Camera" : "Rear Camera";
+                }
+            }
+
+            async function startCamera(facingMode = currentFacingMode) {
+                if (cameraStarting) {
+                    return;
+                }
+                cameraStarting = true;
+                currentFacingMode = facingMode;
+                updateCameraToggleLabel();
+
+                try {
+                    if (cameraInstance) {
+                        await cameraInstance.stop();
+                    }
+                } catch (stopError) {
+                    console.warn("Camera stop error", stopError);
+                }
+
+                cameraInstance = new Camera(videoElement, {
+                    onFrame: async () => {
+                        await hands.send({ image: videoElement });
+                    },
+                    width: 1280,
+                    height: 720,
+                    facingMode: currentFacingMode,
                 });
+
+                try {
+                    await cameraInstance.start();
+                    document.getElementById("loading").style.display = "none";
+                } catch (err) {
+                    console.error("Camera error:", err);
+                    renderCameraError();
+                } finally {
+                    cameraStarting = false;
+                }
+            }
+
+            startCamera().catch((err) => {
+                console.error("Camera start failure:", err);
+                renderCameraError();
+            });
+
+            updateCameraToggleLabel();
 
             // UI Controls
             takeoffBtn.addEventListener("click", () => {
@@ -850,7 +916,6 @@
                 document.body.classList.add("in-flight");
                 setPlaneState(PlaneState.ORBITING);
                 updateGestureDisplay("none");
-                showToast({ icon: "flight_takeoff", label: "Flight Takeoff" });
             });
 
             backToBoardingBtn.addEventListener("click", () => {
@@ -865,13 +930,28 @@
                 orbitAngle = 0;
                 planeGroup.position.set(0, 0, 0);
                 planeGroup.rotation.set(0, 0, 0);
-                showToast({ icon: "mail", label: "Back to Boarding" });
             });
 
-            // Screen Recording with MP4 support
+            cameraToggleBtn?.addEventListener("click", async () => {
+                if (cameraStarting) {
+                    return;
+                }
+                cameraToggleBtn.disabled = true;
+                cameraToggleBtn.classList.add("busy");
+                const nextFacingMode = currentFacingMode === "user" ? "environment" : "user";
+                handDetected = false;
+                gestureType = "none";
+                updateGestureDisplay("none");
+                await startCamera(nextFacingMode);
+                cameraToggleBtn.disabled = false;
+                cameraToggleBtn.classList.remove("busy");
+            });
+
+            // Screen Recording with MP4 support (fallback to WebM when necessary)
             let mediaRecorder;
             let recordedChunks = [];
             let isRecording = false;
+            let activeRecordingExtension = "mp4";
 
             recordBtn.addEventListener("click", async () => {
                 if (!isRecording) {
@@ -884,39 +964,52 @@
                         const canvasStream = recordCanvas.captureStream(30);
 
                         function drawFrame() {
-                            if (isRecording) {
-                                ctx.save();
-                                ctx.scale(-1, 1);
-                                ctx.drawImage(
-                                    videoElement,
-                                    -recordCanvas.width,
-                                    0,
-                                    recordCanvas.width,
-                                    recordCanvas.height,
-                                );
-                                ctx.restore();
-                                ctx.drawImage(
-                                    canvas3D,
-                                    0,
-                                    0,
-                                    recordCanvas.width,
-                                    recordCanvas.height,
-                                );
-                                requestAnimationFrame(drawFrame);
+                            if (!isRecording) {
+                                return;
                             }
+                            ctx.save();
+                            ctx.scale(-1, 1);
+                            ctx.drawImage(
+                                videoElement,
+                                -recordCanvas.width,
+                                0,
+                                recordCanvas.width,
+                                recordCanvas.height,
+                            );
+                            ctx.restore();
+                            ctx.drawImage(canvas3D, 0, 0, recordCanvas.width, recordCanvas.height);
+                            requestAnimationFrame(drawFrame);
                         }
-                        drawFrame();
 
-                        // Try H.264 for MP4 compatibility
-                        const mimeType = MediaRecorder.isTypeSupported("video/mp4")
-                            ? "video/mp4"
-                            : MediaRecorder.isTypeSupported("video/webm;codecs=h264")
-                              ? "video/webm;codecs=h264"
-                              : "video/webm;codecs=vp9";
+                        const mimeCandidates = [
+                            { type: "video/mp4;codecs=avc1.42E01E,mp4a.40.2", extension: "mp4" },
+                            { type: "video/mp4;codecs=avc1.42E01E", extension: "mp4" },
+                            { type: "video/mp4", extension: "mp4" },
+                            { type: "video/webm;codecs=h264", extension: "webm" },
+                            { type: "video/webm;codecs=vp9", extension: "webm" },
+                            { type: "video/webm;codecs=vp8", extension: "webm" },
+                        ];
+
+                        const selectedMime = mimeCandidates.find((candidate) =>
+                            MediaRecorder.isTypeSupported(candidate.type),
+                        );
+
+                        if (!selectedMime) {
+                            throw new Error("No supported recording mime type");
+                        }
+
+                        activeRecordingExtension = selectedMime.extension;
+
+                        if (selectedMime.extension !== "mp4") {
+                            console.warn(
+                                "MP4 recording is not supported by this browser. Falling back to",
+                                selectedMime.type,
+                            );
+                        }
 
                         mediaRecorder = new MediaRecorder(canvasStream, {
-                            mimeType: mimeType,
-                            videoBitsPerSecond: 5000000,
+                            mimeType: selectedMime.type,
+                            videoBitsPerSecond: 6_000_000,
                         });
 
                         recordedChunks = [];
@@ -924,19 +1017,19 @@
                             if (e.data.size > 0) recordedChunks.push(e.data);
                         };
                         mediaRecorder.onstop = () => {
-                            const blob = new Blob(recordedChunks, { type: mimeType });
+                            const blob = new Blob(recordedChunks, { type: selectedMime.type });
                             const url = URL.createObjectURL(blob);
                             const a = document.createElement("a");
                             a.href = url;
-                            const extension = mimeType.includes("mp4") ? "mp4" : "webm";
-                            a.download = `kraken-airlines-${Date.now()}.${extension}`;
+                            a.download = `kraken-airlines-${Date.now()}.${activeRecordingExtension}`;
                             a.click();
                             URL.revokeObjectURL(url);
                         };
 
-                        mediaRecorder.start();
                         isRecording = true;
+                        drawFrame();
 
+                        mediaRecorder.start();
                         recordBtn.classList.add("recording");
                         const icon = recordBtn.querySelector(".material-symbols-rounded");
                         const label = recordBtn.querySelector(".label");
@@ -948,6 +1041,16 @@
                         }
                     } catch (err) {
                         console.error("Recording error:", err);
+                        isRecording = false;
+                        recordBtn.classList.remove("recording");
+                        const icon = recordBtn.querySelector(".material-symbols-rounded");
+                        const label = recordBtn.querySelector(".label");
+                        if (icon) {
+                            icon.textContent = "fiber_manual_record";
+                        }
+                        if (label) {
+                            label.textContent = "Record";
+                        }
                     }
                 } else {
                     mediaRecorder.stop();
