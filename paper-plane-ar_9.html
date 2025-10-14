@@ -67,22 +67,46 @@
                 top: 80px;
                 left: 50%;
                 transform: translateX(-50%);
-                background: rgba(0, 0, 0, 0.7);
-                backdrop-filter: blur(20px);
-                border: 2px solid rgba(255, 255, 255, 0.2);
-                border-radius: 16px;
-                padding: 12px 24px;
+                background: rgba(14, 14, 14, 0.45);
+                backdrop-filter: blur(18px);
+                border: 1px solid rgba(255, 255, 255, 0.16);
+                border-radius: 14px;
+                padding: 8px 14px;
                 color: white;
                 font-weight: 600;
-                font-size: 14px;
+                font-size: 13px;
                 z-index: 100;
                 transition: all 0.3s;
                 opacity: 0;
                 pointer-events: none;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
             }
 
             .gesture-indicator.show {
                 opacity: 1;
+            }
+
+            .gesture-indicator .indicator-chip {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 4px 10px;
+                border-radius: 999px;
+                background: rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                line-height: 1;
+            }
+
+            .gesture-indicator .indicator-chip.state {
+                background: rgba(255, 255, 255, 0.02);
+                border-color: rgba(255, 255, 255, 0.09);
+            }
+
+            .gesture-indicator svg {
+                width: 16px;
+                height: 16px;
             }
 
             .record-btn {
@@ -230,6 +254,11 @@
                 gap: 12px;
             }
 
+            .controls-title svg {
+                width: 24px;
+                height: 24px;
+            }
+
             .close-btn {
                 width: 36px;
                 height: 36px;
@@ -259,10 +288,16 @@
                 border: 1px solid rgba(255, 255, 255, 0.1);
             }
 
-            .control-emoji {
-                font-size: 32px;
+            .control-icon {
                 width: 48px;
-                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .control-icon svg {
+                width: 24px;
+                height: 24px;
             }
 
             .control-text {
@@ -364,14 +399,19 @@
         <div class="controls-popup" id="controlsPopup">
             <div class="controls-content">
                 <div class="controls-header">
-                    <div class="controls-title">✋ Gesture Controls</div>
+                    <div class="controls-title">
+                        <i data-lucide="hand"></i>
+                        Gesture Controls
+                    </div>
                     <button class="close-btn" id="closeBtn">
                         <i data-lucide="x" size="20"></i>
                     </button>
                 </div>
 
                 <div class="control-item">
-                    <div class="control-emoji">🤏</div>
+                    <div class="control-icon">
+                        <i data-lucide="hand"></i>
+                    </div>
                     <div class="control-text">
                         <strong>Pinch</strong>
                         <span>Drag plane anywhere</span>
@@ -379,7 +419,9 @@
                 </div>
 
                 <div class="control-item">
-                    <div class="control-emoji">👆</div>
+                    <div class="control-icon">
+                        <i data-lucide="mouse-pointer"></i>
+                    </div>
                     <div class="control-text">
                         <strong>Point (Index Finger)</strong>
                         <span>Guide plane direction smoothly</span>
@@ -387,7 +429,9 @@
                 </div>
 
                 <div class="control-item">
-                    <div class="control-emoji">✌️</div>
+                    <div class="control-icon">
+                        <i data-lucide="sparkles"></i>
+                    </div>
                     <div class="control-text">
                         <strong>Peace Sign</strong>
                         <span>Barrel roll trick</span>
@@ -395,7 +439,9 @@
                 </div>
 
                 <div class="control-item">
-                    <div class="control-emoji">🖐️</div>
+                    <div class="control-icon">
+                        <i data-lucide="zoom-out"></i>
+                    </div>
                     <div class="control-text">
                         <strong>Open Palm</strong>
                         <span>Zoom out (increase orbit)</span>
@@ -403,7 +449,9 @@
                 </div>
 
                 <div class="control-item">
-                    <div class="control-emoji">✊</div>
+                    <div class="control-icon">
+                        <i data-lucide="zoom-in"></i>
+                    </div>
                     <div class="control-text">
                         <strong>Fist</strong>
                         <span>Zoom in (decrease orbit)</span>
@@ -490,7 +538,7 @@
             const PlaneState = {
                 IDLE: "idle",
                 DRAGGING: "dragging",
-                ORBITING: "orbiting", // Auto-circling flight
+                ORBITING: "orbiting", // Autonomous flight loop
                 CONTROLLED: "controlled", // Pointing gesture control
                 TRICK: "trick",
             };
@@ -505,52 +553,75 @@
             let smoothedHandY = 0;
 
             // Gesture display
-            function updateGestureDisplay(gesture, progress = null) {
+            function buildIndicatorMarkup(chips = []) {
+                return chips
+                    .filter((chip) => chip && chip.label)
+                    .map((chip) => {
+                        const iconMarkup = chip.icon ? `<i data-lucide="${chip.icon}"></i>` : "";
+                        const variantClass = chip.variant ? ` ${chip.variant}` : "";
+                        return `<span class="indicator-chip${variantClass}">${iconMarkup}<span>${chip.label}</span></span>`;
+                    })
+                    .join("");
+            }
+
+            function renderIndicator(chips = []) {
                 const indicator = document.getElementById("gestureIndicator");
-                let text = "";
-                let stateText = "";
+                if (!indicator) {
+                    return;
+                }
+
+                const markup = buildIndicatorMarkup(chips);
+                if (!markup) {
+                    indicator.classList.remove("show");
+                    indicator.innerHTML = "";
+                    return;
+                }
+
+                indicator.innerHTML = markup;
+                indicator.classList.add("show");
+                if (window.lucide?.createIcons) {
+                    window.lucide.createIcons({ node: indicator });
+                }
+            }
+
+            function updateGestureDisplay(gesture, progress = null) {
+                const chips = [];
 
                 switch (gesture) {
                     case "pinch":
-                        text = "🤏 Dragging";
+                        chips.push({ icon: "hand", label: "Dragging" });
                         break;
                     case "pointing":
-                        text = "👆 Directing";
+                        chips.push({ icon: "mouse-pointer", label: "Directing" });
                         break;
                     case "peace":
-                        text = "✌️ Trick Mode";
+                        chips.push({ icon: "sparkles", label: "Trick Mode" });
                         break;
                     case "open_palm":
-                        text = "🖐️ Zoom Out";
+                        chips.push({ icon: "zoom-out", label: "Zoom Out" });
                         break;
                     case "fist":
-                        text = "✊ Zoom In";
+                        chips.push({ icon: "zoom-in", label: "Zoom In" });
                         break;
                     default:
-                        text = "";
+                        break;
                 }
 
                 switch (currentState) {
                     case PlaneState.ORBITING:
-                        stateText = " • ✈️ Orbiting";
+                        chips.push({ icon: "plane", label: "On Flight", variant: "state" });
                         break;
                     case PlaneState.CONTROLLED:
-                        stateText = " • 🎮 Manual";
+                        chips.push({ icon: "gamepad-2", label: "Manual", variant: "state" });
                         break;
                     case PlaneState.TRICK:
-                        stateText = " • 🌀 Trick";
+                        chips.push({ icon: "sparkles", label: "Trick", variant: "state" });
                         break;
-                    case PlaneState.DRAGGING:
-                        stateText = "";
+                    default:
                         break;
                 }
 
-                if (text || stateText) {
-                    indicator.textContent = text + stateText;
-                    indicator.classList.add("show");
-                } else {
-                    indicator.classList.remove("show");
-                }
+                renderIndicator(chips);
             }
 
             // Trail System
@@ -741,7 +812,7 @@
 
             function doTrick() {
                 currentState = PlaneState.TRICK;
-                showIndicator("✌️ Barrel Roll!");
+                showIndicator({ icon: "rotate-cw", label: "Barrel Roll!" });
                 setTimeout(() => {
                     if (currentState === PlaneState.TRICK) {
                         currentState = PlaneState.ORBITING;
@@ -749,15 +820,27 @@
                 }, 1500);
             }
 
-            function showIndicator(text) {
+            function showIndicator(chip) {
                 const indicator = document.getElementById("gestureIndicator");
-                const currentText = indicator.textContent;
-                indicator.textContent = text;
-                indicator.classList.add("show");
+                if (!indicator) {
+                    return;
+                }
+
+                const markup = buildIndicatorMarkup(chip ? [chip] : []);
+                indicator.innerHTML = markup;
+                if (markup) {
+                    indicator.classList.add("show");
+                    if (window.lucide?.createIcons) {
+                        window.lucide.createIcons({ node: indicator });
+                    }
+                } else {
+                    indicator.classList.remove("show");
+                }
 
                 setTimeout(() => {
-                    if (indicator.textContent === text) {
+                    if (indicator.innerHTML === markup) {
                         indicator.classList.remove("show");
+                        indicator.innerHTML = "";
                     }
                 }, 2000);
             }
@@ -778,14 +861,20 @@
                 })
                 .catch((err) => {
                     console.error("Camera error:", err);
-                    document.getElementById("loading").innerHTML = `
+                    const loadingEl = document.getElementById("loading");
+                    loadingEl.innerHTML = `
                 <div style="color: #ef4444; text-align: center;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
+                    <div style="margin-bottom: 16px; display: flex; justify-content: center;">
+                        <i data-lucide="camera" style="width: 48px; height: 48px;"></i>
+                    </div>
                     <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
                     <div style="font-size: 14px; opacity: 0.8;">Please allow camera access to use this app</div>
                     <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
                 </div>
             `;
+                    if (window.lucide?.createIcons) {
+                        window.lucide.createIcons({ node: loadingEl });
+                    }
                 });
 
             // UI Controls
@@ -796,7 +885,7 @@
             document.getElementById("launchBtn").addEventListener("click", () => {
                 if (currentState === PlaneState.IDLE || currentState === PlaneState.DRAGGING) {
                     currentState = PlaneState.ORBITING;
-                    showIndicator("🚀 Plane launched!");
+                    showIndicator({ icon: "rocket", label: "Plane launched!" });
                 }
             });
 
@@ -804,7 +893,7 @@
                 if (currentState !== PlaneState.IDLE) {
                     currentState = PlaneState.IDLE;
                     trailPoints.length = 0;
-                    showIndicator("🛬 Plane landed");
+                    showIndicator({ icon: "plane-landing", label: "Plane landed" });
                 }
             });
 
