@@ -1,741 +1,784 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kraken Airlines - AR Paper Plane</title>
-    <link rel="icon" href="assets/ico.ico" type="image/x-icon">
-    <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Kraken Airlines - AR Paper Plane</title>
+        <link rel="icon" href="assets/ico.ico" type="image/x-icon" />
+        <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+        <script src="https://unpkg.com/lucide@latest"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap");
 
-        body {
-            overflow: hidden;
-            background: #000;
-        }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family:
+                    "Geist",
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    sans-serif;
+            }
 
-        #videoElement {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            transform: scaleX(-1);
-        }
+            body {
+                overflow: hidden;
+                background: #000;
+            }
 
-        #canvas3D {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-        }
+            #videoElement {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                object-fit: cover;
+                transform: scaleX(-1);
+            }
 
-        .brand {
-            position: absolute;
-            top: 32px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-        }
+            #canvas3D {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                pointer-events: none;
+            }
 
-        .brand img {
-            height: 48px;
-            display: block;
-            filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
-        }
+            .brand {
+                position: absolute;
+                top: 32px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
+            }
 
-        .gesture-indicator {
-            position: absolute;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 12px 24px;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            z-index: 100;
-            transition: all 0.3s;
-            opacity: 0;
-            pointer-events: none;
-        }
+            .brand img {
+                height: 48px;
+                display: block;
+                filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.35));
+            }
 
-        .gesture-indicator.show {
-            opacity: 1;
-        }
+            .gesture-indicator {
+                position: absolute;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 0, 0, 0.7);
+                backdrop-filter: blur(20px);
+                border: 2px solid rgba(255, 255, 255, 0.2);
+                border-radius: 16px;
+                padding: 12px 24px;
+                color: white;
+                font-weight: 600;
+                font-size: 14px;
+                z-index: 100;
+                transition: all 0.3s;
+                opacity: 0;
+                pointer-events: none;
+            }
 
-        .record-btn {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 60px;
-            padding: 14px 32px;
-            color: white;
-            font-weight: 500;
-            font-size: 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 100;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
+            .gesture-indicator.show {
+                opacity: 1;
+            }
 
-        .record-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateX(-50%) scale(1.05);
-        }
+            .record-btn {
+                position: absolute;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(20px);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 60px;
+                padding: 14px 32px;
+                color: white;
+                font-weight: 500;
+                font-size: 15px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                z-index: 100;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            }
 
-        .record-btn.recording {
-            background: rgba(239, 68, 68, 0.25);
-            border-color: rgba(239, 68, 68, 0.5);
-        }
+            .record-btn:hover {
+                background: rgba(255, 255, 255, 0.25);
+                transform: translateX(-50%) scale(1.05);
+            }
 
-        .record-btn.recording .rec-dot {
-            animation: pulse 1.5s ease-in-out infinite;
-        }
+            .record-btn.recording {
+                background: rgba(239, 68, 68, 0.25);
+                border-color: rgba(239, 68, 68, 0.5);
+            }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
-        }
+            .record-btn.recording .rec-dot {
+                animation: pulse 1.5s ease-in-out infinite;
+            }
 
-        .rec-dot {
-            width: 12px;
-            height: 12px;
-            background: #ef4444;
-            border-radius: 50%;
-        }
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+                50% {
+                    opacity: 0.6;
+                    transform: scale(1.1);
+                }
+            }
 
-        .help-btn {
-            position: absolute;
-            top: 32px;
-            right: 32px;
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: all 0.3s;
-        }
+            .rec-dot {
+                width: 12px;
+                height: 12px;
+                background: #ef4444;
+                border-radius: 50%;
+            }
 
-        .help-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
+            .help-btn {
+                position: absolute;
+                top: 32px;
+                right: 32px;
+                width: 48px;
+                height: 48px;
+                background: rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(20px);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 50%;
+                color: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 100;
+                transition: all 0.3s;
+            }
 
-        .controls-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 200;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.3s;
-        }
+            .help-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.1);
+            }
 
-        .controls-popup.show {
-            display: flex;
-        }
+            .controls-popup {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.8);
+                backdrop-filter: blur(10px);
+                z-index: 200;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                animation: fadeIn 0.3s;
+            }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+            .controls-popup.show {
+                display: flex;
+            }
 
-        .controls-content {
-            background: rgba(40, 40, 40, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 32px;
-            max-width: 500px;
-            width: 90%;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            animation: slideUp 0.3s;
-        }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
 
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+            .controls-content {
+                background: rgba(40, 40, 40, 0.95);
+                backdrop-filter: blur(20px);
+                border-radius: 24px;
+                padding: 32px;
+                max-width: 500px;
+                width: 90%;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                animation: slideUp 0.3s;
+            }
 
-        .controls-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
+            @keyframes slideUp {
+                from {
+                    transform: translateY(20px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
 
-        .controls-title {
-            color: white;
-            font-size: 24px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+            .controls-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 24px;
+            }
 
-        .close-btn {
-            width: 36px;
-            height: 36px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
+            .controls-title {
+                color: white;
+                font-size: 24px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
 
-        .close-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
+            .close-btn {
+                width: 36px;
+                height: 36px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 50%;
+                color: white;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+            }
 
-        .control-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+            .close-btn:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
 
-        .control-emoji {
-            font-size: 32px;
-            width: 48px;
-            text-align: center;
-        }
+            .control-item {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+                padding: 16px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                margin-bottom: 12px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
 
-        .control-text {
-            flex: 1;
-            color: white;
-        }
+            .control-emoji {
+                font-size: 32px;
+                width: 48px;
+                text-align: center;
+            }
 
-        .control-text strong {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 4px;
-            font-size: 15px;
-        }
+            .control-text {
+                flex: 1;
+                color: white;
+            }
 
-        .control-text span {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 13px;
-        }
+            .control-text strong {
+                display: block;
+                font-weight: 600;
+                margin-bottom: 4px;
+                font-size: 15px;
+            }
 
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-            text-align: center;
-            z-index: 50;
-        }
+            .control-text span {
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 13px;
+            }
 
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
+            .loading {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                color: white;
+                font-size: 18px;
+                font-weight: 500;
+                text-align: center;
+                z-index: 50;
+            }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+            .loading-spinner {
+                width: 40px;
+                height: 40px;
+                border: 3px solid rgba(255, 255, 255, 0.3);
+                border-top-color: white;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+                margin: 0 auto 16px;
+            }
 
-        #canvasElement {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div id="loading" class="loading">
-        <div class="loading-spinner"></div>
-        Initializing camera...
-    </div>
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
 
-    <video id="videoElement" autoplay playsinline></video>
-    <canvas id="canvas3D"></canvas>
-    <canvas id="canvasElement"></canvas>
+            #canvasElement {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            Initializing camera...
+        </div>
 
-    <div class="brand">
-        <img src="assets/logo-air.svg" alt="Kraken Airlines logo">
-    </div>
+        <video id="videoElement" autoplay playsinline></video>
+        <canvas id="canvas3D"></canvas>
+        <canvas id="canvasElement"></canvas>
 
-    <button class="help-btn" id="helpBtn">
-        <i data-lucide="help-circle" size="24"></i>
-    </button>
+        <div class="brand">
+            <img src="assets/logo-air.svg" alt="Kraken Airlines logo" />
+        </div>
 
-    <div style="position: absolute; top: 32px; left: 32px; display: flex; gap: 12px; z-index: 100;">
-        <button class="help-btn" id="launchBtn" style="width: auto; padding: 0 20px; border-radius: 24px;">
-            <span style="font-size: 14px; font-weight: 600;">Launch</span>
+        <button class="help-btn" id="helpBtn">
+            <i data-lucide="help-circle" size="24"></i>
         </button>
-        <button class="help-btn" id="landBtn" style="width: auto; padding: 0 20px; border-radius: 24px;">
-            <span style="font-size: 14px; font-weight: 600;">Land</span>
-        </button>
-    </div>
 
-    <div class="gesture-indicator" id="gestureIndicator"></div>
+        <div
+            style="
+                position: absolute;
+                top: 32px;
+                left: 32px;
+                display: flex;
+                gap: 12px;
+                z-index: 100;
+            "
+        >
+            <button
+                class="help-btn"
+                id="launchBtn"
+                style="width: auto; padding: 0 20px; border-radius: 24px"
+            >
+                <span style="font-size: 14px; font-weight: 600">Launch</span>
+            </button>
+            <button
+                class="help-btn"
+                id="landBtn"
+                style="width: auto; padding: 0 20px; border-radius: 24px"
+            >
+                <span style="font-size: 14px; font-weight: 600">Land</span>
+            </button>
+        </div>
 
-    <div class="controls-popup" id="controlsPopup">
-        <div class="controls-content">
-            <div class="controls-header">
-                <div class="controls-title">
-                    ✋ Gesture Controls
+        <div class="gesture-indicator" id="gestureIndicator"></div>
+
+        <div class="controls-popup" id="controlsPopup">
+            <div class="controls-content">
+                <div class="controls-header">
+                    <div class="controls-title">✋ Gesture Controls</div>
+                    <button class="close-btn" id="closeBtn">
+                        <i data-lucide="x" size="20"></i>
+                    </button>
                 </div>
-                <button class="close-btn" id="closeBtn">
-                    <i data-lucide="x" size="20"></i>
-                </button>
-            </div>
 
-            <div class="control-item">
-                <div class="control-emoji">🤏</div>
-                <div class="control-text">
-                    <strong>Pinch</strong>
-                    <span>Drag plane anywhere</span>
+                <div class="control-item">
+                    <div class="control-emoji">🤏</div>
+                    <div class="control-text">
+                        <strong>Pinch</strong>
+                        <span>Drag plane anywhere</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-item">
-                <div class="control-emoji">👆</div>
-                <div class="control-text">
-                    <strong>Point (Index Finger)</strong>
-                    <span>Guide plane direction smoothly</span>
+                <div class="control-item">
+                    <div class="control-emoji">👆</div>
+                    <div class="control-text">
+                        <strong>Point (Index Finger)</strong>
+                        <span>Guide plane direction smoothly</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-item">
-                <div class="control-emoji">✌️</div>
-                <div class="control-text">
-                    <strong>Peace Sign</strong>
-                    <span>Barrel roll trick</span>
+                <div class="control-item">
+                    <div class="control-emoji">✌️</div>
+                    <div class="control-text">
+                        <strong>Peace Sign</strong>
+                        <span>Barrel roll trick</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-item">
-                <div class="control-emoji">🖐️</div>
-                <div class="control-text">
-                    <strong>Open Palm</strong>
-                    <span>Zoom out (increase orbit)</span>
+                <div class="control-item">
+                    <div class="control-emoji">🖐️</div>
+                    <div class="control-text">
+                        <strong>Open Palm</strong>
+                        <span>Zoom out (increase orbit)</span>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-item">
-                <div class="control-emoji">✊</div>
-                <div class="control-text">
-                    <strong>Fist</strong>
-                    <span>Zoom in (decrease orbit)</span>
+                <div class="control-item">
+                    <div class="control-emoji">✊</div>
+                    <div class="control-text">
+                        <strong>Fist</strong>
+                        <span>Zoom in (decrease orbit)</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <button class="record-btn" id="recordBtn">
-        <div class="rec-dot"></div>
-        <span>Record</span>
-    </button>
+        <button class="record-btn" id="recordBtn">
+            <div class="rec-dot"></div>
+            <span>Record</span>
+        </button>
 
-    <script type="module">
-        // Three.js Setup
-        const canvas3D = document.getElementById('canvas3D');
-        const scene = new THREE.Scene();
-        
-        const renderer = new THREE.WebGLRenderer({ 
-            canvas: canvas3D,
-            alpha: true,
-            antialias: true 
-        });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        <script type="module">
+            // Three.js Setup
+            const canvas3D = document.getElementById("canvas3D");
+            const scene = new THREE.Scene();
 
-        const camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
-        );
-        camera.position.z = 5;
-
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-        scene.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
-
-        const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
-        backLight.position.set(-5, -3, -5);
-        scene.add(backLight);
-
-        // Load Paper Plane Model
-        const planeGroup = new THREE.Group();
-        scene.add(planeGroup);
-
-        let planeModel;
-
-        // Create paper plane geometry
-        function createPaperPlane() {
-            const geometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array([
-                0, 0, 1.5,
-                -1.2, 0, -0.6,
-                1.2, 0, -0.6,
-                0, 0.3, 0.2,
-                0, -0.3, -0.3,
-                -0.4, 0, -0.8,
-                0.4, 0, -0.8
-            ]);
-            
-            const indices = [
-                0, 1, 3,  0, 3, 2,  0, 2, 4,  0, 4, 1,
-                3, 1, 5,  3, 2, 6,  4, 5, 1,  4, 2, 6
-            ];
-            
-            geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-            geometry.setIndex(indices);
-            geometry.computeVertexNormals();
-
-            const material = new THREE.MeshPhongMaterial({
-                color: 0xffffff,
-                shininess: 30,
-                side: THREE.DoubleSide
+            const renderer = new THREE.WebGLRenderer({
+                canvas: canvas3D,
+                alpha: true,
+                antialias: true,
             });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
 
-            const mesh = new THREE.Mesh(geometry, material);
-            mesh.scale.set(0.6, 0.6, 0.6);
-            planeGroup.add(mesh);
-            planeModel = mesh;
-        }
-
-        createPaperPlane();
-
-        // Plane States
-        const PlaneState = {
-            IDLE: 'idle',
-            DRAGGING: 'dragging',
-            ORBITING: 'orbiting', // Auto-circling flight
-            CONTROLLED: 'controlled', // Pointing gesture control
-            TRICK: 'trick'
-        };
-
-        let currentState = PlaneState.ORBITING;
-        let planeVelocity = new THREE.Vector3(0, 0, 0);
-        let targetDirection = new THREE.Vector3(0, 0, -1);
-        let targetDistance = 12; // Distance from center
-        let orbitAngle = 0;
-        let orbitSpeed = 0.01;
-        let smoothedHandX = 0;
-        let smoothedHandY = 0;
-
-        // Gesture display
-        function updateGestureDisplay(gesture, progress = null) {
-            const indicator = document.getElementById('gestureIndicator');
-            let text = '';
-            let stateText = '';
-
-            switch(gesture) {
-                case 'pinch':
-                    text = '🤏 Dragging';
-                    break;
-                case 'pointing':
-                    text = '👆 Directing';
-                    break;
-                case 'peace':
-                    text = '✌️ Trick Mode';
-                    break;
-                case 'open_palm':
-                    text = '🖐️ Zoom Out';
-                    break;
-                case 'fist':
-                    text = '✊ Zoom In';
-                    break;
-                default:
-                    text = '';
-            }
-
-            switch(currentState) {
-                case PlaneState.ORBITING:
-                    stateText = ' • ✈️ Orbiting';
-                    break;
-                case PlaneState.CONTROLLED:
-                    stateText = ' • 🎮 Manual';
-                    break;
-                case PlaneState.TRICK:
-                    stateText = ' • 🌀 Trick';
-                    break;
-                case PlaneState.DRAGGING:
-                    stateText = '';
-                    break;
-            }
-
-            if (text || stateText) {
-                indicator.textContent = text + stateText;
-                indicator.classList.add('show');
-            } else {
-                indicator.classList.remove('show');
-            }
-        }
-
-        // Trail System
-        const trailPoints = [];
-        const maxTrailLength = 80;
-        let trailGeometry = new THREE.BufferGeometry();
-        const trailMaterial = new THREE.LineBasicMaterial({
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.6,
-            linewidth: 2
-        });
-        const trailLine = new THREE.Line(trailGeometry, trailMaterial);
-        scene.add(trailLine);
-
-        function updateTrail() {
-            if (currentState === PlaneState.FLYING || 
-                currentState === PlaneState.CONTROLLED ||
-                currentState === PlaneState.LOOPING) {
-                trailPoints.push(planeGroup.position.clone());
-            }
-            
-            if (trailPoints.length > maxTrailLength) {
-                trailPoints.shift();
-            }
-            
-            const positions = new Float32Array(trailPoints.length * 3);
-            trailPoints.forEach((point, i) => {
-                positions[i * 3] = point.x;
-                positions[i * 3 + 1] = point.y;
-                positions[i * 3 + 2] = point.z;
-            });
-            
-            trailGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            trailGeometry.attributes.position.needsUpdate = true;
-        }
-
-        // Hand Tracking State
-        let handX = 0;
-        let handY = 0;
-        let handZ = 0;
-        let handDetected = false;
-        let gestureType = 'none';
-        let lastGesture = 'none';
-
-        // MediaPipe Hands
-        const videoElement = document.getElementById('videoElement');
-        const hands = new Hands({
-            locateFile: (file) => {
-                return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
-            }
-        });
-
-        hands.setOptions({
-            maxNumHands: 1,
-            modelComplexity: 1,
-            minDetectionConfidence: 0.7,
-            minTrackingConfidence: 0.7
-        });
-
-        hands.onResults(onResults);
-
-        function detectGesture(landmarks) {
-            const wrist = landmarks[0];
-            const thumbTip = landmarks[4];
-            const indexTip = landmarks[8];
-            const indexPip = landmarks[6];
-            const indexMcp = landmarks[5];
-            const middleTip = landmarks[12];
-            const middlePip = landmarks[10];
-            const ringTip = landmarks[16];
-            const ringPip = landmarks[14];
-            const pinkyTip = landmarks[20];
-            const pinkyPip = landmarks[18];
-
-            // Calculate thumb-index distance for pinch
-            const thumbIndexDist = Math.sqrt(
-                Math.pow(thumbTip.x - indexTip.x, 2) +
-                Math.pow(thumbTip.y - indexTip.y, 2) +
-                Math.pow(thumbTip.z - indexTip.z, 2)
+            const camera = new THREE.PerspectiveCamera(
+                75,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                1000,
             );
+            camera.position.z = 5;
 
-            // Check if fingers are extended
-            const indexExtended = indexTip.y < indexMcp.y - 0.04;
-            const middleExtended = middleTip.y < middlePip.y - 0.03;
-            const ringExtended = ringTip.y < ringPip.y - 0.03;
-            const pinkyExtended = pinkyTip.y < pinkyPip.y - 0.03;
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+            scene.add(ambientLight);
 
-            // Fist - all fingers closed
-            if (!indexExtended && !middleExtended && !ringExtended && !pinkyExtended) {
-                return 'fist';
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            directionalLight.position.set(5, 5, 5);
+            scene.add(directionalLight);
+
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            backLight.position.set(-5, -3, -5);
+            scene.add(backLight);
+
+            // Load Paper Plane Model
+            const planeGroup = new THREE.Group();
+            scene.add(planeGroup);
+
+            let planeModel;
+
+            // Create paper plane geometry
+            function createPaperPlane() {
+                const geometry = new THREE.BufferGeometry();
+                const vertices = new Float32Array([
+                    0, 0, 1.5, -1.2, 0, -0.6, 1.2, 0, -0.6, 0, 0.3, 0.2, 0, -0.3, -0.3, -0.4, 0,
+                    -0.8, 0.4, 0, -0.8,
+                ]);
+
+                const indices = [
+                    0, 1, 3, 0, 3, 2, 0, 2, 4, 0, 4, 1, 3, 1, 5, 3, 2, 6, 4, 5, 1, 4, 2, 6,
+                ];
+
+                geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+                geometry.setIndex(indices);
+                geometry.computeVertexNormals();
+
+                const material = new THREE.MeshPhongMaterial({
+                    color: 0xffffff,
+                    shininess: 30,
+                    side: THREE.DoubleSide,
+                });
+
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.scale.set(0.6, 0.6, 0.6);
+                planeGroup.add(mesh);
+                planeModel = mesh;
             }
 
-            // Pinch - thumb and index close
-            if (thumbIndexDist < 0.08) {
-                return 'pinch';
+            createPaperPlane();
+
+            // Plane States
+            const PlaneState = {
+                IDLE: "idle",
+                DRAGGING: "dragging",
+                ORBITING: "orbiting", // Auto-circling flight
+                CONTROLLED: "controlled", // Pointing gesture control
+                TRICK: "trick",
+            };
+
+            let currentState = PlaneState.ORBITING;
+            let planeVelocity = new THREE.Vector3(0, 0, 0);
+            let targetDirection = new THREE.Vector3(0, 0, -1);
+            let targetDistance = 12; // Distance from center
+            let orbitAngle = 0;
+            let orbitSpeed = 0.01;
+            let smoothedHandX = 0;
+            let smoothedHandY = 0;
+
+            // Gesture display
+            function updateGestureDisplay(gesture, progress = null) {
+                const indicator = document.getElementById("gestureIndicator");
+                let text = "";
+                let stateText = "";
+
+                switch (gesture) {
+                    case "pinch":
+                        text = "🤏 Dragging";
+                        break;
+                    case "pointing":
+                        text = "👆 Directing";
+                        break;
+                    case "peace":
+                        text = "✌️ Trick Mode";
+                        break;
+                    case "open_palm":
+                        text = "🖐️ Zoom Out";
+                        break;
+                    case "fist":
+                        text = "✊ Zoom In";
+                        break;
+                    default:
+                        text = "";
+                }
+
+                switch (currentState) {
+                    case PlaneState.ORBITING:
+                        stateText = " • ✈️ Orbiting";
+                        break;
+                    case PlaneState.CONTROLLED:
+                        stateText = " • 🎮 Manual";
+                        break;
+                    case PlaneState.TRICK:
+                        stateText = " • 🌀 Trick";
+                        break;
+                    case PlaneState.DRAGGING:
+                        stateText = "";
+                        break;
+                }
+
+                if (text || stateText) {
+                    indicator.textContent = text + stateText;
+                    indicator.classList.add("show");
+                } else {
+                    indicator.classList.remove("show");
+                }
             }
 
-            // Peace sign - index and middle up, others down
-            if (indexExtended && middleExtended && !ringExtended && !pinkyExtended) {
-                return 'peace';
+            // Trail System
+            const trailPoints = [];
+            const maxTrailLength = 80;
+            let trailGeometry = new THREE.BufferGeometry();
+            const trailMaterial = new THREE.LineBasicMaterial({
+                color: 0xffffff,
+                transparent: true,
+                opacity: 0.6,
+                linewidth: 2,
+            });
+            const trailLine = new THREE.Line(trailGeometry, trailMaterial);
+            scene.add(trailLine);
+
+            function updateTrail() {
+                if (
+                    currentState === PlaneState.FLYING ||
+                    currentState === PlaneState.CONTROLLED ||
+                    currentState === PlaneState.LOOPING
+                ) {
+                    trailPoints.push(planeGroup.position.clone());
+                }
+
+                if (trailPoints.length > maxTrailLength) {
+                    trailPoints.shift();
+                }
+
+                const positions = new Float32Array(trailPoints.length * 3);
+                trailPoints.forEach((point, i) => {
+                    positions[i * 3] = point.x;
+                    positions[i * 3 + 1] = point.y;
+                    positions[i * 3 + 2] = point.z;
+                });
+
+                trailGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+                trailGeometry.attributes.position.needsUpdate = true;
             }
 
-            // Open palm - all fingers extended
-            if (indexExtended && middleExtended && ringExtended && pinkyExtended) {
-                return 'open_palm';
-            }
+            // Hand Tracking State
+            let handX = 0;
+            let handY = 0;
+            let handZ = 0;
+            let handDetected = false;
+            let gestureType = "none";
+            let lastGesture = "none";
 
-            // Pointing - only index extended
-            if (indexExtended && !middleExtended && !ringExtended && !pinkyExtended) {
-                return 'pointing';
-            }
+            // MediaPipe Hands
+            const videoElement = document.getElementById("videoElement");
+            const hands = new Hands({
+                locateFile: (file) => {
+                    return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+                },
+            });
 
-            return 'none';
-        }
+            hands.setOptions({
+                maxNumHands: 1,
+                modelComplexity: 1,
+                minDetectionConfidence: 0.7,
+                minTrackingConfidence: 0.7,
+            });
 
-        function onResults(results) {
-            if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
-                const landmarks = results.multiHandLandmarks[0];
-                
+            hands.onResults(onResults);
+
+            function detectGesture(landmarks) {
+                const wrist = landmarks[0];
+                const thumbTip = landmarks[4];
                 const indexTip = landmarks[8];
-                const palmBase = landmarks[0];
-                
-                handX = (indexTip.x - 0.5) * 2;
-                handY = (indexTip.y - 0.5) * -2;
-                handZ = palmBase.z;
-                
-                // Smooth hand position
-                smoothedHandX += (handX - smoothedHandX) * 0.3;
-                smoothedHandY += (handY - smoothedHandY) * 0.3;
-                
-                handDetected = true;
-                gestureType = detectGesture(landmarks);
-                
-                updateGestureDisplay(gestureType);
-                
-                // Pinch - enter drag mode
-                if (gestureType === 'pinch' && currentState !== PlaneState.DRAGGING) {
-                    currentState = PlaneState.DRAGGING;
-                } else if (gestureType !== 'pinch' && currentState === PlaneState.DRAGGING) {
-                    currentState = PlaneState.ORBITING;
+                const indexPip = landmarks[6];
+                const indexMcp = landmarks[5];
+                const middleTip = landmarks[12];
+                const middlePip = landmarks[10];
+                const ringTip = landmarks[16];
+                const ringPip = landmarks[14];
+                const pinkyTip = landmarks[20];
+                const pinkyPip = landmarks[18];
+
+                // Calculate thumb-index distance for pinch
+                const thumbIndexDist = Math.sqrt(
+                    Math.pow(thumbTip.x - indexTip.x, 2) +
+                        Math.pow(thumbTip.y - indexTip.y, 2) +
+                        Math.pow(thumbTip.z - indexTip.z, 2),
+                );
+
+                // Check if fingers are extended
+                const indexExtended = indexTip.y < indexMcp.y - 0.04;
+                const middleExtended = middleTip.y < middlePip.y - 0.03;
+                const ringExtended = ringTip.y < ringPip.y - 0.03;
+                const pinkyExtended = pinkyTip.y < pinkyPip.y - 0.03;
+
+                // Fist - all fingers closed
+                if (!indexExtended && !middleExtended && !ringExtended && !pinkyExtended) {
+                    return "fist";
                 }
-                
-                // Pointing - enter controlled mode
-                if (gestureType === 'pointing') {
-                    if (currentState === PlaneState.ORBITING) {
-                        currentState = PlaneState.CONTROLLED;
+
+                // Pinch - thumb and index close
+                if (thumbIndexDist < 0.08) {
+                    return "pinch";
+                }
+
+                // Peace sign - index and middle up, others down
+                if (indexExtended && middleExtended && !ringExtended && !pinkyExtended) {
+                    return "peace";
+                }
+
+                // Open palm - all fingers extended
+                if (indexExtended && middleExtended && ringExtended && pinkyExtended) {
+                    return "open_palm";
+                }
+
+                // Pointing - only index extended
+                if (indexExtended && !middleExtended && !ringExtended && !pinkyExtended) {
+                    return "pointing";
+                }
+
+                return "none";
+            }
+
+            function onResults(results) {
+                if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+                    const landmarks = results.multiHandLandmarks[0];
+
+                    const indexTip = landmarks[8];
+                    const palmBase = landmarks[0];
+
+                    handX = (indexTip.x - 0.5) * 2;
+                    handY = (indexTip.y - 0.5) * -2;
+                    handZ = palmBase.z;
+
+                    // Smooth hand position
+                    smoothedHandX += (handX - smoothedHandX) * 0.3;
+                    smoothedHandY += (handY - smoothedHandY) * 0.3;
+
+                    handDetected = true;
+                    gestureType = detectGesture(landmarks);
+
+                    updateGestureDisplay(gestureType);
+
+                    // Pinch - enter drag mode
+                    if (gestureType === "pinch" && currentState !== PlaneState.DRAGGING) {
+                        currentState = PlaneState.DRAGGING;
+                    } else if (gestureType !== "pinch" && currentState === PlaneState.DRAGGING) {
+                        currentState = PlaneState.ORBITING;
                     }
-                } else if (currentState === PlaneState.CONTROLLED && gestureType !== 'pointing') {
-                    currentState = PlaneState.ORBITING;
-                }
-                
-                // Peace - trick
-                if (gestureType === 'peace' && currentState === PlaneState.ORBITING) {
-                    if (lastGesture !== 'peace') {
-                        doTrick();
+
+                    // Pointing - enter controlled mode
+                    if (gestureType === "pointing") {
+                        if (currentState === PlaneState.ORBITING) {
+                            currentState = PlaneState.CONTROLLED;
+                        }
+                    } else if (
+                        currentState === PlaneState.CONTROLLED &&
+                        gestureType !== "pointing"
+                    ) {
+                        currentState = PlaneState.ORBITING;
                     }
-                }
-                
-                // Open palm - zoom out
-                if (gestureType === 'open_palm') {
-                    targetDistance = Math.min(targetDistance + 0.2, 20);
-                }
-                
-                // Fist - zoom in
-                if (gestureType === 'fist') {
-                    targetDistance = Math.max(targetDistance - 0.2, 6);
-                }
-                
-                lastGesture = gestureType;
-            } else {
-                handDetected = false;
-                gestureType = 'none';
-                updateGestureDisplay('none');
-                if (currentState === PlaneState.DRAGGING || currentState === PlaneState.CONTROLLED) {
-                    currentState = PlaneState.ORBITING;
+
+                    // Peace - trick
+                    if (gestureType === "peace" && currentState === PlaneState.ORBITING) {
+                        if (lastGesture !== "peace") {
+                            doTrick();
+                        }
+                    }
+
+                    // Open palm - zoom out
+                    if (gestureType === "open_palm") {
+                        targetDistance = Math.min(targetDistance + 0.2, 20);
+                    }
+
+                    // Fist - zoom in
+                    if (gestureType === "fist") {
+                        targetDistance = Math.max(targetDistance - 0.2, 6);
+                    }
+
+                    lastGesture = gestureType;
+                } else {
+                    handDetected = false;
+                    gestureType = "none";
+                    updateGestureDisplay("none");
+                    if (
+                        currentState === PlaneState.DRAGGING ||
+                        currentState === PlaneState.CONTROLLED
+                    ) {
+                        currentState = PlaneState.ORBITING;
+                    }
                 }
             }
-        }
 
-        function doTrick() {
-            currentState = PlaneState.TRICK;
-            showIndicator('✌️ Barrel Roll!');
-            setTimeout(() => {
-                if (currentState === PlaneState.TRICK) {
-                    currentState = PlaneState.ORBITING;
-                }
-            }, 1500);
-        }
+            function doTrick() {
+                currentState = PlaneState.TRICK;
+                showIndicator("✌️ Barrel Roll!");
+                setTimeout(() => {
+                    if (currentState === PlaneState.TRICK) {
+                        currentState = PlaneState.ORBITING;
+                    }
+                }, 1500);
+            }
 
-        function showIndicator(text) {
-            const indicator = document.getElementById('gestureIndicator');
-            const currentText = indicator.textContent;
-            indicator.textContent = text;
-            indicator.classList.add('show');
-            
-            setTimeout(() => {
-                if (indicator.textContent === text) {
-                    indicator.classList.remove('show');
-                }
-            }, 2000);
-        }
+            function showIndicator(text) {
+                const indicator = document.getElementById("gestureIndicator");
+                const currentText = indicator.textContent;
+                indicator.textContent = text;
+                indicator.classList.add("show");
 
-        // Camera Setup
-        const cameraInstance = new Camera(videoElement, {
-            onFrame: async () => {
-                await hands.send({ image: videoElement });
-            },
-            width: 1280,
-            height: 720
-        });
-        
-        cameraInstance.start().then(() => {
-            document.getElementById('loading').style.display = 'none';
-        }).catch((err) => {
-            console.error('Camera error:', err);
-            document.getElementById('loading').innerHTML = `
+                setTimeout(() => {
+                    if (indicator.textContent === text) {
+                        indicator.classList.remove("show");
+                    }
+                }, 2000);
+            }
+
+            // Camera Setup
+            const cameraInstance = new Camera(videoElement, {
+                onFrame: async () => {
+                    await hands.send({ image: videoElement });
+                },
+                width: 1280,
+                height: 720,
+            });
+
+            cameraInstance
+                .start()
+                .then(() => {
+                    document.getElementById("loading").style.display = "none";
+                })
+                .catch((err) => {
+                    console.error("Camera error:", err);
+                    document.getElementById("loading").innerHTML = `
                 <div style="color: #ef4444; text-align: center;">
                     <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
                     <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
@@ -743,234 +786,262 @@
                     <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
                 </div>
             `;
-        });
+                });
 
-        // UI Controls
-        document.getElementById('helpBtn').addEventListener('click', () => {
-            document.getElementById('controlsPopup').classList.add('show');
-        });
+            // UI Controls
+            document.getElementById("helpBtn").addEventListener("click", () => {
+                document.getElementById("controlsPopup").classList.add("show");
+            });
 
-        document.getElementById('launchBtn').addEventListener('click', () => {
-            if (currentState === PlaneState.IDLE || currentState === PlaneState.DRAGGING) {
-                currentState = PlaneState.ORBITING;
-                showIndicator('🚀 Plane launched!');
-            }
-        });
+            document.getElementById("launchBtn").addEventListener("click", () => {
+                if (currentState === PlaneState.IDLE || currentState === PlaneState.DRAGGING) {
+                    currentState = PlaneState.ORBITING;
+                    showIndicator("🚀 Plane launched!");
+                }
+            });
 
-        document.getElementById('landBtn').addEventListener('click', () => {
-            if (currentState !== PlaneState.IDLE) {
-                currentState = PlaneState.IDLE;
-                trailPoints.length = 0;
-                showIndicator('🛬 Plane landed');
-            }
-        });
+            document.getElementById("landBtn").addEventListener("click", () => {
+                if (currentState !== PlaneState.IDLE) {
+                    currentState = PlaneState.IDLE;
+                    trailPoints.length = 0;
+                    showIndicator("🛬 Plane landed");
+                }
+            });
 
-        document.getElementById('closeBtn').addEventListener('click', () => {
-            document.getElementById('controlsPopup').classList.remove('show');
-        });
+            document.getElementById("closeBtn").addEventListener("click", () => {
+                document.getElementById("controlsPopup").classList.remove("show");
+            });
 
-        document.getElementById('controlsPopup').addEventListener('click', (e) => {
-            if (e.target.id === 'controlsPopup') {
-                document.getElementById('controlsPopup').classList.remove('show');
-            }
-        });
+            document.getElementById("controlsPopup").addEventListener("click", (e) => {
+                if (e.target.id === "controlsPopup") {
+                    document.getElementById("controlsPopup").classList.remove("show");
+                }
+            });
 
-        // Screen Recording with MP4 support
-        let mediaRecorder;
-        let recordedChunks = [];
-        let isRecording = false;
+            // Screen Recording with MP4 support
+            let mediaRecorder;
+            let recordedChunks = [];
+            let isRecording = false;
 
-        document.getElementById('recordBtn').addEventListener('click', async () => {
-            if (!isRecording) {
-                try {
-                    const recordCanvas = document.createElement('canvas');
-                    recordCanvas.width = 1280;
-                    recordCanvas.height = 720;
-                    const ctx = recordCanvas.getContext('2d');
-                    
-                    const canvasStream = recordCanvas.captureStream(30);
-                    
-                    function drawFrame() {
-                        if (isRecording) {
-                            ctx.save();
-                            ctx.scale(-1, 1);
-                            ctx.drawImage(videoElement, -recordCanvas.width, 0, recordCanvas.width, recordCanvas.height);
-                            ctx.restore();
-                            ctx.drawImage(canvas3D, 0, 0, recordCanvas.width, recordCanvas.height);
-                            requestAnimationFrame(drawFrame);
+            document.getElementById("recordBtn").addEventListener("click", async () => {
+                if (!isRecording) {
+                    try {
+                        const recordCanvas = document.createElement("canvas");
+                        recordCanvas.width = 1280;
+                        recordCanvas.height = 720;
+                        const ctx = recordCanvas.getContext("2d");
+
+                        const canvasStream = recordCanvas.captureStream(30);
+
+                        function drawFrame() {
+                            if (isRecording) {
+                                ctx.save();
+                                ctx.scale(-1, 1);
+                                ctx.drawImage(
+                                    videoElement,
+                                    -recordCanvas.width,
+                                    0,
+                                    recordCanvas.width,
+                                    recordCanvas.height,
+                                );
+                                ctx.restore();
+                                ctx.drawImage(
+                                    canvas3D,
+                                    0,
+                                    0,
+                                    recordCanvas.width,
+                                    recordCanvas.height,
+                                );
+                                requestAnimationFrame(drawFrame);
+                            }
                         }
+                        drawFrame();
+
+                        // Try H.264 for MP4 compatibility
+                        const mimeType = MediaRecorder.isTypeSupported("video/mp4")
+                            ? "video/mp4"
+                            : MediaRecorder.isTypeSupported("video/webm;codecs=h264")
+                              ? "video/webm;codecs=h264"
+                              : "video/webm;codecs=vp9";
+
+                        mediaRecorder = new MediaRecorder(canvasStream, {
+                            mimeType: mimeType,
+                            videoBitsPerSecond: 5000000,
+                        });
+
+                        recordedChunks = [];
+                        mediaRecorder.ondataavailable = (e) => {
+                            if (e.data.size > 0) recordedChunks.push(e.data);
+                        };
+                        mediaRecorder.onstop = () => {
+                            const blob = new Blob(recordedChunks, { type: mimeType });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            const extension = mimeType.includes("mp4") ? "mp4" : "webm";
+                            a.download = `kraken-airlines-${Date.now()}.${extension}`;
+                            a.click();
+                            URL.revokeObjectURL(url);
+                        };
+
+                        mediaRecorder.start();
+                        isRecording = true;
+
+                        const btn = document.getElementById("recordBtn");
+                        btn.classList.add("recording");
+                        btn.querySelector("span").textContent = "Stop";
+                    } catch (err) {
+                        console.error("Recording error:", err);
                     }
-                    drawFrame();
+                } else {
+                    mediaRecorder.stop();
+                    isRecording = false;
 
-                    // Try H.264 for MP4 compatibility
-                    const mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' :
-                                    MediaRecorder.isTypeSupported('video/webm;codecs=h264') ? 'video/webm;codecs=h264' :
-                                    'video/webm;codecs=vp9';
+                    const btn = document.getElementById("recordBtn");
+                    btn.classList.remove("recording");
+                    btn.querySelector("span").textContent = "Record";
+                }
+            });
 
-                    mediaRecorder = new MediaRecorder(canvasStream, {
-                        mimeType: mimeType,
-                        videoBitsPerSecond: 5000000
+            // Animation Loop
+            let time = 0;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.016;
+
+                switch (currentState) {
+                    case PlaneState.IDLE:
+                        // Gentle idle animation
+                        planeGroup.rotation.y += Math.sin(time * 2) * 0.002;
+                        planeGroup.rotation.z = Math.cos(time * 0.7) * 0.05;
+                        trailPoints.length = 0;
+                        break;
+
+                    case PlaneState.DRAGGING:
+                        if (handDetected && gestureType === "pinch") {
+                            // Follow hand exactly
+                            planeGroup.position.x = smoothedHandX * 4;
+                            planeGroup.position.y = smoothedHandY * 3;
+                            planeGroup.position.z = handZ * -10;
+                        }
+                        trailPoints.length = 0;
+                        break;
+
+                    case PlaneState.ORBITING:
+                        // Smooth circular orbit in center of screen
+                        orbitAngle += orbitSpeed;
+
+                        const targetX = Math.cos(orbitAngle) * targetDistance;
+                        const targetY = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
+                        const targetZ =
+                            Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
+
+                        // Smooth interpolation to target position
+                        planeGroup.position.x += (targetX - planeGroup.position.x) * 0.05;
+                        planeGroup.position.y += (targetY - planeGroup.position.y) * 0.05;
+                        planeGroup.position.z += (targetZ - planeGroup.position.z) * 0.05;
+
+                        // Look at next point on orbit
+                        const lookAheadAngle = orbitAngle + 0.3;
+                        const lookX = Math.cos(lookAheadAngle) * targetDistance;
+                        const lookY = Math.sin(lookAheadAngle * 0.7) * (targetDistance * 0.3);
+                        const lookZ =
+                            Math.sin(lookAheadAngle) * targetDistance - targetDistance * 0.5;
+
+                        const lookTarget = new THREE.Vector3(lookX, lookY, lookZ);
+                        const currentLook = new THREE.Vector3();
+                        planeGroup.getWorldDirection(currentLook);
+
+                        const targetDir = lookTarget.sub(planeGroup.position).normalize();
+                        planeGroup.lookAt(planeGroup.position.clone().add(targetDir));
+
+                        // Add slight roll
+                        planeGroup.rotation.z = Math.sin(orbitAngle) * 0.3;
+                        break;
+
+                    case PlaneState.CONTROLLED:
+                        if (handDetected && gestureType === "pointing") {
+                            // Smoothly guide plane toward hand direction
+                            const targetControlX = smoothedHandX * 6;
+                            const targetControlY = smoothedHandY * 5;
+
+                            planeGroup.position.x +=
+                                (targetControlX - planeGroup.position.x) * 0.08;
+                            planeGroup.position.y +=
+                                (targetControlY - planeGroup.position.y) * 0.08;
+
+                            // Maintain forward motion
+                            planeGroup.position.z +=
+                                (-targetDistance * 0.5 - planeGroup.position.z) * 0.05;
+
+                            // Look at direction of movement
+                            const moveDir = new THREE.Vector3(
+                                targetControlX - planeGroup.position.x,
+                                targetControlY - planeGroup.position.y,
+                                -0.5,
+                            ).normalize();
+
+                            const targetQuat = new THREE.Quaternion();
+                            const lookMatrix = new THREE.Matrix4();
+                            lookMatrix.lookAt(
+                                planeGroup.position,
+                                planeGroup.position.clone().add(moveDir),
+                                new THREE.Vector3(0, 1, 0),
+                            );
+                            targetQuat.setFromRotationMatrix(lookMatrix);
+                            planeGroup.quaternion.slerp(targetQuat, 0.1);
+                        }
+                        break;
+
+                    case PlaneState.TRICK:
+                        // Barrel roll animation
+                        const trickProgress = (Date.now() % 1500) / 1500;
+                        planeGroup.rotation.z = trickProgress * Math.PI * 4;
+
+                        // Continue orbiting during trick
+                        orbitAngle += orbitSpeed;
+                        planeGroup.position.x = Math.cos(orbitAngle) * targetDistance;
+                        planeGroup.position.y = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
+                        planeGroup.position.z =
+                            Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
+                        break;
+                }
+
+                // Update trail for all states except IDLE and DRAGGING
+                if (
+                    currentState === PlaneState.ORBITING ||
+                    currentState === PlaneState.CONTROLLED ||
+                    currentState === PlaneState.TRICK
+                ) {
+                    trailPoints.push(planeGroup.position.clone());
+                    if (trailPoints.length > maxTrailLength) {
+                        trailPoints.shift();
+                    }
+
+                    const positions = new Float32Array(trailPoints.length * 3);
+                    trailPoints.forEach((point, i) => {
+                        positions[i * 3] = point.x;
+                        positions[i * 3 + 1] = point.y;
+                        positions[i * 3 + 2] = point.z;
                     });
 
-                    recordedChunks = [];
-                    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
-                    mediaRecorder.onstop = () => {
-                        const blob = new Blob(recordedChunks, { type: mimeType });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        const extension = mimeType.includes('mp4') ? 'mp4' : 'webm';
-                        a.download = `kraken-airlines-${Date.now()}.${extension}`;
-                        a.click();
-                        URL.revokeObjectURL(url);
-                    };
-
-                    mediaRecorder.start();
-                    isRecording = true;
-                    
-                    const btn = document.getElementById('recordBtn');
-                    btn.classList.add('recording');
-                    btn.querySelector('span').textContent = 'Stop';
-                } catch (err) {
-                    console.error('Recording error:', err);
+                    trailGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+                    trailGeometry.attributes.position.needsUpdate = true;
                 }
-            } else {
-                mediaRecorder.stop();
-                isRecording = false;
-                
-                const btn = document.getElementById('recordBtn');
-                btn.classList.remove('recording');
-                btn.querySelector('span').textContent = 'Record';
-            }
-        });
 
-        // Animation Loop
-        let time = 0;
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.016;
-
-            switch(currentState) {
-                case PlaneState.IDLE:
-                    // Gentle idle animation
-                    planeGroup.rotation.y += Math.sin(time * 2) * 0.002;
-                    planeGroup.rotation.z = Math.cos(time * 0.7) * 0.05;
-                    trailPoints.length = 0;
-                    break;
-
-                case PlaneState.DRAGGING:
-                    if (handDetected && gestureType === 'pinch') {
-                        // Follow hand exactly
-                        planeGroup.position.x = smoothedHandX * 4;
-                        planeGroup.position.y = smoothedHandY * 3;
-                        planeGroup.position.z = handZ * -10;
-                    }
-                    trailPoints.length = 0;
-                    break;
-
-                case PlaneState.ORBITING:
-                    // Smooth circular orbit in center of screen
-                    orbitAngle += orbitSpeed;
-                    
-                    const targetX = Math.cos(orbitAngle) * targetDistance;
-                    const targetY = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
-                    const targetZ = Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
-                    
-                    // Smooth interpolation to target position
-                    planeGroup.position.x += (targetX - planeGroup.position.x) * 0.05;
-                    planeGroup.position.y += (targetY - planeGroup.position.y) * 0.05;
-                    planeGroup.position.z += (targetZ - planeGroup.position.z) * 0.05;
-                    
-                    // Look at next point on orbit
-                    const lookAheadAngle = orbitAngle + 0.3;
-                    const lookX = Math.cos(lookAheadAngle) * targetDistance;
-                    const lookY = Math.sin(lookAheadAngle * 0.7) * (targetDistance * 0.3);
-                    const lookZ = Math.sin(lookAheadAngle) * targetDistance - targetDistance * 0.5;
-                    
-                    const lookTarget = new THREE.Vector3(lookX, lookY, lookZ);
-                    const currentLook = new THREE.Vector3();
-                    planeGroup.getWorldDirection(currentLook);
-                    
-                    const targetDir = lookTarget.sub(planeGroup.position).normalize();
-                    planeGroup.lookAt(planeGroup.position.clone().add(targetDir));
-                    
-                    // Add slight roll
-                    planeGroup.rotation.z = Math.sin(orbitAngle) * 0.3;
-                    break;
-
-                case PlaneState.CONTROLLED:
-                    if (handDetected && gestureType === 'pointing') {
-                        // Smoothly guide plane toward hand direction
-                        const targetControlX = smoothedHandX * 6;
-                        const targetControlY = smoothedHandY * 5;
-                        
-                        planeGroup.position.x += (targetControlX - planeGroup.position.x) * 0.08;
-                        planeGroup.position.y += (targetControlY - planeGroup.position.y) * 0.08;
-                        
-                        // Maintain forward motion
-                        planeGroup.position.z += ((-targetDistance * 0.5) - planeGroup.position.z) * 0.05;
-                        
-                        // Look at direction of movement
-                        const moveDir = new THREE.Vector3(
-                            targetControlX - planeGroup.position.x,
-                            targetControlY - planeGroup.position.y,
-                            -0.5
-                        ).normalize();
-                        
-                        const targetQuat = new THREE.Quaternion();
-                        const lookMatrix = new THREE.Matrix4();
-                        lookMatrix.lookAt(planeGroup.position, planeGroup.position.clone().add(moveDir), new THREE.Vector3(0, 1, 0));
-                        targetQuat.setFromRotationMatrix(lookMatrix);
-                        planeGroup.quaternion.slerp(targetQuat, 0.1);
-                    }
-                    break;
-
-                case PlaneState.TRICK:
-                    // Barrel roll animation
-                    const trickProgress = (Date.now() % 1500) / 1500;
-                    planeGroup.rotation.z = trickProgress * Math.PI * 4;
-                    
-                    // Continue orbiting during trick
-                    orbitAngle += orbitSpeed;
-                    planeGroup.position.x = Math.cos(orbitAngle) * targetDistance;
-                    planeGroup.position.y = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
-                    planeGroup.position.z = Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
-                    break;
+                renderer.render(scene, camera);
             }
 
-            // Update trail for all states except IDLE and DRAGGING
-            if (currentState === PlaneState.ORBITING || 
-                currentState === PlaneState.CONTROLLED || 
-                currentState === PlaneState.TRICK) {
-                trailPoints.push(planeGroup.position.clone());
-                if (trailPoints.length > maxTrailLength) {
-                    trailPoints.shift();
-                }
-                
-                const positions = new Float32Array(trailPoints.length * 3);
-                trailPoints.forEach((point, i) => {
-                    positions[i * 3] = point.x;
-                    positions[i * 3 + 1] = point.y;
-                    positions[i * 3 + 2] = point.z;
-                });
-                
-                trailGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-                trailGeometry.attributes.position.needsUpdate = true;
-            }
+            // Handle resize
+            window.addEventListener("resize", () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
 
-            renderer.render(scene, camera);
-        }
-
-        // Handle resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        lucide.createIcons();
-        animate();
-    </script>
-</body>
+            lucide.createIcons();
+            animate();
+        </script>
+    </body>
 </html>

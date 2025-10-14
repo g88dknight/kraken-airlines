@@ -9,11 +9,13 @@ Immersive paper plane demonstration that pairs Three.js with MediaPipe hand trac
     - `ico.ico` – site favicon.
 
 ## Getting Started
-1. Start a local server from the repository root so camera APIs work correctly:
-   - `python3 -m http.server 5173`
-2. Open `http://localhost:5173/paper-plane-ar_9.html` in Chrome or Edge.
-3. Allow camera access and verify gestures (pinch, point, peace, open palm, fist).
+1. Install dependencies: `npm install`
+2. Start a local dev server: `npm run dev`
+3. Open `http://localhost:5173/paper-plane-ar_9.html` in Chrome or Edge.
+4. Allow camera access and verify gestures (pinch, point, peace, open palm, fist).
 
 ## Formatting
-- `npx prettier@latest --check paper-plane-ar_9.html`
+- `npm run format`
 
+## Deployment
+- Vercel rewrites the root route to `paper-plane-ar_9.html` via `vercel.json`.

@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/",
+            "destination": "/paper-plane-ar_9.html"
+        }
+    ]
+}
