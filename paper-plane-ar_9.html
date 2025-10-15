@@ -39,7 +39,6 @@
                 width: 100vw;
                 height: 100vh;
                 object-fit: cover;
-                transform: scaleX(-1);
             }
 
             #canvas3D {
@@ -162,11 +161,82 @@
             }
 
             .boarding-content {
+                width: min(480px, 90vw);
                 display: flex;
                 flex-direction: column;
-                align-items: center;
                 gap: 28px;
+                align-items: center;
                 text-align: center;
+            }
+
+            .boarding-instructions {
+                padding: 28px 24px;
+                border-radius: 28px;
+                display: flex;
+                flex-direction: column;
+                gap: 22px;
+                color: rgba(255, 255, 255, 0.92);
+            }
+
+            .boarding-title {
+                font-size: 20px;
+                font-weight: 600;
+                text-align: center;
+                letter-spacing: 0.4px;
+            }
+
+            .instruction-item {
+                display: flex;
+                gap: 16px;
+                align-items: center;
+            }
+
+            .instruction-item + .instruction-item {
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding-top: 18px;
+                margin-top: 4px;
+            }
+
+            .instruction-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 18px;
+                background: rgba(255, 255, 255, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .instruction-icon svg {
+                width: 32px;
+                height: 32px;
+                stroke: rgba(255, 255, 255, 0.85);
+                stroke-width: 2;
+                fill: none;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            .instruction-icon svg circle {
+                stroke-width: 1.8;
+            }
+
+            .instruction-text {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .instruction-text strong {
+                font-size: 15px;
+                font-weight: 600;
+            }
+
+            .instruction-text span {
+                font-size: 13px;
+                color: rgba(255, 255, 255, 0.7);
+                line-height: 1.4;
             }
 
             .primary-btn {
@@ -205,6 +275,9 @@
                 display: flex;
                 gap: 12px;
                 pointer-events: auto;
+                width: min(520px, 92vw);
+                justify-content: center;
+                flex-wrap: wrap;
             }
 
             body.boarding .bottom-actions {
@@ -250,71 +323,6 @@
                 background: rgba(239, 68, 68, 0.28);
                 border-color: rgba(239, 68, 68, 0.6);
                 color: #f87171;
-            }
-
-            .gesture-legend {
-                display: flex;
-                gap: 18px;
-                padding: 12px 24px;
-                border-radius: 999px;
-                pointer-events: none;
-            }
-
-            body.boarding .gesture-legend {
-                background: rgba(0, 0, 0, 0.65);
-                border-color: rgba(255, 255, 255, 0.32);
-            }
-
-            .gesture-item {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 6px;
-                color: rgba(255, 255, 255, 0.7);
-                font-size: 12px;
-                transition: all 0.3s ease;
-            }
-
-            .gesture-icon {
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-                border: 1px solid rgba(255, 255, 255, 0.22);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: rgba(255, 255, 255, 0.08);
-                color: rgba(255, 255, 255, 0.9);
-            }
-
-            .gesture-icon svg {
-                width: 26px;
-                height: 26px;
-            }
-
-            .gesture-icon path,
-            .gesture-icon circle {
-                stroke: currentColor;
-                stroke-width: 1.9;
-                fill: none;
-                stroke-linecap: round;
-                stroke-linejoin: round;
-            }
-
-            .gesture-icon .filled {
-                fill: currentColor;
-                stroke: none;
-            }
-
-            .gesture-item.active .gesture-icon {
-                background: rgba(59, 130, 246, 0.28);
-                border-color: rgba(59, 130, 246, 0.5);
-                color: #bfdbfe;
-                transform: translateY(-2px);
-            }
-
-            .gesture-item.active span:last-child {
-                color: #f8fafc;
             }
 
             .loading {
@@ -371,6 +379,52 @@
 
         <div class="boarding-screen" id="boardingScreen">
             <div class="boarding-content">
+                <div class="boarding-instructions glass-surface">
+                    <h2 class="boarding-title">Gesture Controls</h2>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">
+                            <svg viewBox="0 0 32 32" aria-hidden="true">
+                                <path d="M12 6v11" />
+                                <path d="M12 17l8-6" />
+                                <circle cx="20" cy="11.8" r="1.6" />
+                                <path d="M20 12c2.2 0 4 1.8 4 4v6" />
+                            </svg>
+                        </div>
+                        <div class="instruction-text">
+                            <strong>Pinch to drag &amp; launch</strong>
+                            <span>Двумя пальцами для перемещения и отпустите для запуска</span>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">
+                            <svg viewBox="0 0 32 32" aria-hidden="true">
+                                <path d="M16 6v12" />
+                                <path d="M12 12v10" />
+                                <path d="M20 15v8" />
+                                <path d="M12 22c0 2.6 1.9 4.7 4.5 4.7h1c2.6 0 4.5-2.1 4.5-4.7V20" />
+                            </svg>
+                        </div>
+                        <div class="instruction-text">
+                            <strong>Tilt wrist to steer</strong>
+                            <span>Наклоняйте кисть вниз для управления наклоном самолёта</span>
+                        </div>
+                    </div>
+                    <div class="instruction-item">
+                        <div class="instruction-icon">
+                            <svg viewBox="0 0 32 32" aria-hidden="true">
+                                <path d="M9.5 9v11" />
+                                <path d="M13 6.5v13.5" />
+                                <path d="M17 6v14" />
+                                <path d="M21 7.5v12.5" />
+                                <path d="M24.5 12v8c0 3.3-2.7 6-6 6H16c-3.3 0-6-2.7-6-6v-4" />
+                            </svg>
+                        </div>
+                        <div class="instruction-text">
+                            <strong>Turn palm &amp; clench to land</strong>
+                            <span>Поверните ладонь к себе и стисните кулак для посадки</span>
+                        </div>
+                    </div>
+                </div>
                 <button class="primary-btn glass-surface" id="takeoffBtn">
                     <span class="material-symbols-rounded">flight_takeoff</span>
                     <span class="label">Flight Takeoff</span>
@@ -381,94 +435,17 @@
         <div class="bottom-ui">
             <div class="bottom-actions">
                 <button class="glass-btn glass-surface" id="backToBoardingBtn">
-                    <span class="material-symbols-rounded">mail</span>
-                    <span class="label">Back to Boarding</span>
-                </button>
-                <button class="glass-btn glass-surface" id="cameraToggleBtn">
-                    <span class="material-symbols-rounded">cameraswitch</span>
-                    <span class="label">Rear Camera</span>
+                    <span class="material-symbols-rounded">undo</span>
+                    <span class="label">To Boarding</span>
                 </button>
                 <button class="glass-btn glass-surface record" id="recordBtn">
                     <span class="material-symbols-rounded">fiber_manual_record</span>
                     <span class="label">Record</span>
                 </button>
-            </div>
-            <div class="gesture-legend glass-surface">
-                <div class="gesture-item" data-gesture="pinch">
-                    <div class="gesture-icon">
-                        <svg
-                            viewBox="0 0 32 32"
-                            aria-hidden="true"
-                            class="gesture-svg gesture-pinch"
-                        >
-                            <path d="M12 6v11" />
-                            <path d="M12 17l8-6" />
-                            <circle cx="20" cy="11.8" r="1.6" />
-                            <path d="M20 12c2.2 0 4 1.8 4 4v6" />
-                        </svg>
-                    </div>
-                    <span>Drag</span>
-                </div>
-                <div class="gesture-item" data-gesture="pointing">
-                    <div class="gesture-icon">
-                        <svg
-                            viewBox="0 0 32 32"
-                            aria-hidden="true"
-                            class="gesture-svg gesture-point"
-                        >
-                            <path d="M16 6v12" />
-                            <path d="M12 12v10" />
-                            <path d="M20 15v8" />
-                            <path d="M12 22c0 2.6 1.9 4.7 4.5 4.7h1c2.6 0 4.5-2.1 4.5-4.7V20" />
-                        </svg>
-                    </div>
-                    <span>Direction</span>
-                </div>
-                <div class="gesture-item" data-gesture="peace">
-                    <div class="gesture-icon">
-                        <svg
-                            viewBox="0 0 32 32"
-                            aria-hidden="true"
-                            class="gesture-svg gesture-peace"
-                        >
-                            <path d="M14 6v11" />
-                            <path d="M18 6v11" />
-                            <path d="M11 13.5v8.5c0 2.8 2.1 5 4.9 5H18c2.5 0 4.5-2 4.5-4.5v-5.5" />
-                        </svg>
-                    </div>
-                    <span>Trick</span>
-                </div>
-                <div class="gesture-item" data-gesture="fist">
-                    <div class="gesture-icon">
-                        <svg
-                            viewBox="0 0 32 32"
-                            aria-hidden="true"
-                            class="gesture-svg gesture-fist"
-                        >
-                            <path
-                                class="filled"
-                                d="M11 14v6.5c0 4.1 3.2 7.5 7.2 7.5h0.7c3.6 0 6.6-3 6.6-6.6V17c0-1.7-1.3-3-3-3h-1v-2.4c0-1.7-1.3-3-3-3s-3 1.3-3 3V14h-1.5c-1.6 0-3 1.3-3 3Z"
-                            />
-                        </svg>
-                    </div>
-                    <span>In</span>
-                </div>
-                <div class="gesture-item" data-gesture="open_palm">
-                    <div class="gesture-icon">
-                        <svg
-                            viewBox="0 0 32 32"
-                            aria-hidden="true"
-                            class="gesture-svg gesture-open"
-                        >
-                            <path d="M9.5 9v11" />
-                            <path d="M13 6.5v13.5" />
-                            <path d="M17 6v14" />
-                            <path d="M21 7.5v12.5" />
-                            <path d="M24.5 12v8c0 3.3-2.7 6-6 6H16c-3.3 0-6-2.7-6-6v-4" />
-                        </svg>
-                    </div>
-                    <span>Out</span>
-                </div>
+                <button class="glass-btn glass-surface" id="cameraToggleBtn">
+                    <span class="material-symbols-rounded">cameraswitch</span>
+                    <span class="label">Rear Camera</span>
+                </button>
             </div>
         </div>
 
@@ -540,6 +517,8 @@
             }
 
             createPaperPlane();
+            planeGroup.position.set(0, -0.4, -4.5);
+            planeGroup.rotation.set(0, 0, 0);
 
             // Plane States
             const PlaneState = {
@@ -551,19 +530,20 @@
             };
 
             let currentState = PlaneState.IDLE;
-            let planeVelocity = new THREE.Vector3(0, 0, 0);
-            let targetDirection = new THREE.Vector3(0, 0, -1);
-            let targetDistance = 12; // Distance from center
+            let targetDistance = 4.6; // Distance from center
             let orbitAngle = 0;
             let orbitSpeed = 0.01;
             let smoothedHandX = 0;
             let smoothedHandY = 0;
+            let wasPinching = false;
+            const palmTilt = { roll: 0, pitch: 0 };
+            let palmFacingCamera = false;
+            let palmFacingDown = false;
 
             document.body.classList.remove("in-flight");
             document.body.classList.add("boarding");
 
             const statusIndicator = document.getElementById("statusIndicator");
-            const gestureLegendItems = document.querySelectorAll(".gesture-item");
             const takeoffBtn = document.getElementById("takeoffBtn");
             const backToBoardingBtn = document.getElementById("backToBoardingBtn");
             const recordBtn = document.getElementById("recordBtn");
@@ -610,19 +590,7 @@
                 statusIndicator.innerHTML = `${materialIcon(config.icon)}<span class="status-label">${config.label}</span>`;
             }
 
-            function setActiveGesture(gesture) {
-                gestureLegendItems.forEach((item) => {
-                    item.classList.toggle("active", item.dataset.gesture === gesture);
-                });
-            }
-
-            function updateGestureDisplay(gesture) {
-                if (!gesture || gesture === "none") {
-                    setActiveGesture("");
-                } else {
-                    setActiveGesture(gesture);
-                }
-            }
+            function updateGestureDisplay(gesture) {}
 
             function setPlaneState(nextState) {
                 if (currentState === nextState) {
@@ -674,7 +642,6 @@
             // Hand Tracking State
             let handX = 0;
             let handY = 0;
-            let handZ = 0;
             let handDetected = false;
             let gestureType = "none";
             let lastGesture = "none";
@@ -695,6 +662,34 @@
             });
 
             hands.onResults(onResults);
+
+            const tempVecA = new THREE.Vector3();
+            const tempVecB = new THREE.Vector3();
+            const palmNormal = new THREE.Vector3();
+
+            function calculatePalmNormal(landmarks) {
+                const wrist = landmarks[0];
+                const indexMcp = landmarks[5];
+                const pinkyMcp = landmarks[17];
+
+                tempVecA.set(indexMcp.x - wrist.x, indexMcp.y - wrist.y, indexMcp.z - wrist.z);
+                tempVecB.set(pinkyMcp.x - wrist.x, pinkyMcp.y - wrist.y, pinkyMcp.z - wrist.z);
+                palmNormal.copy(tempVecA.cross(tempVecB)).normalize();
+                return palmNormal;
+            }
+
+            function updatePalmTilt(landmarks) {
+                const wrist = landmarks[0];
+                const middleMcp = landmarks[9];
+
+                const direction = tempVecA
+                    .set(middleMcp.x - wrist.x, middleMcp.y - wrist.y, middleMcp.z - wrist.z)
+                    .normalize();
+
+                // Convert to intuitive roll/pitch (clamped for stability)
+                palmTilt.roll = THREE.MathUtils.clamp(-direction.x * 1.6, -0.8, 0.8);
+                palmTilt.pitch = THREE.MathUtils.clamp((direction.y - 0.5) * 1.4, -0.5, 0.5);
+            }
 
             function detectGesture(landmarks) {
                 const wrist = landmarks[0];
@@ -767,8 +762,6 @@
 
                     handX = (indexTip.x - 0.5) * 2;
                     handY = (indexTip.y - 0.5) * -2;
-                    handZ = palmBase.z;
-
                     // Smooth hand position
                     smoothedHandX += (handX - smoothedHandX) * 0.3;
                     smoothedHandY += (handY - smoothedHandY) * 0.3;
@@ -778,38 +771,43 @@
 
                     updateGestureDisplay(gestureType);
 
-                    // Pinch - enter drag mode
-                    if (gestureType === "pinch") {
-                        setPlaneState(PlaneState.DRAGGING);
-                    } else if (currentState === PlaneState.DRAGGING) {
-                        setPlaneState(PlaneState.ORBITING);
+                    const normal = calculatePalmNormal(landmarks);
+                    palmFacingCamera = normal.z < -0.25;
+                    palmFacingDown = normal.y > 0.1;
+                    updatePalmTilt(landmarks);
+                    if (!palmFacingDown) {
+                        palmTilt.roll *= 0.3;
+                        palmTilt.pitch *= 0.3;
                     }
 
-                    // Pointing - enter controlled mode
-                    if (gestureType === "pointing") {
+                    if (gestureType === "pinch") {
+                        wasPinching = true;
+                        setPlaneState(PlaneState.DRAGGING);
+                    } else if (wasPinching) {
+                        launchPlane();
+                    }
+
+                    if (gestureType === "pointing" && currentState !== PlaneState.DRAGGING) {
                         setPlaneState(PlaneState.CONTROLLED);
                     } else if (
-                        currentState === PlaneState.CONTROLLED &&
-                        gestureType !== "pointing"
+                        gestureType !== "pointing" &&
+                        currentState === PlaneState.CONTROLLED
                     ) {
                         setPlaneState(PlaneState.ORBITING);
                     }
 
-                    // Peace - trick
                     if (gestureType === "peace" && currentState === PlaneState.ORBITING) {
                         if (lastGesture !== "peace") {
                             doTrick();
                         }
                     }
 
-                    // Open palm - zoom out
-                    if (gestureType === "open_palm") {
-                        targetDistance = Math.min(targetDistance + 0.2, 20);
-                    }
-
-                    // Fist - zoom in
-                    if (gestureType === "fist") {
-                        targetDistance = Math.max(targetDistance - 0.2, 6);
+                    if (
+                        gestureType === "fist" &&
+                        palmFacingCamera &&
+                        currentState !== PlaneState.IDLE
+                    ) {
+                        landPlane();
                     }
 
                     lastGesture = gestureType;
@@ -825,6 +823,10 @@
                     ) {
                         setPlaneState(PlaneState.ORBITING);
                     }
+                    if (wasPinching) {
+                        launchPlane();
+                    }
+                    wasPinching = false;
                 }
             }
 
@@ -835,6 +837,28 @@
                         setPlaneState(PlaneState.ORBITING);
                     }
                 }, 1500);
+            }
+
+            function launchPlane() {
+                wasPinching = false;
+                const pos = planeGroup.position;
+                const centerZ = pos.z + 6.5;
+                const radius = THREE.MathUtils.clamp(
+                    Math.sqrt(pos.x * pos.x + centerZ * centerZ),
+                    3.6,
+                    5.6,
+                );
+                targetDistance = radius;
+                orbitAngle = Math.atan2(centerZ, pos.x || 0.0001);
+                setPlaneState(PlaneState.ORBITING);
+            }
+
+            function landPlane() {
+                wasPinching = false;
+                setPlaneState(PlaneState.IDLE);
+                targetDistance = 4.2;
+                planeGroup.position.set(0, -0.4, -4.5);
+                planeGroup.rotation.set(0, 0, 0);
             }
 
             // Camera Setup
@@ -862,8 +886,7 @@
                 }
                 const label = cameraToggleBtn.querySelector(".label");
                 if (label) {
-                    label.textContent =
-                        currentFacingMode === "user" ? "Front Camera" : "Rear Camera";
+                    label.textContent = "Switch Camera";
                 }
             }
 
@@ -914,6 +937,10 @@
             takeoffBtn.addEventListener("click", () => {
                 document.body.classList.remove("boarding");
                 document.body.classList.add("in-flight");
+                planeGroup.position.set(0, -0.4, -4.5);
+                planeGroup.rotation.set(0, 0, 0);
+                targetDistance = 4.6;
+                orbitAngle = 0;
                 setPlaneState(PlaneState.ORBITING);
                 updateGestureDisplay("none");
             });
@@ -926,9 +953,9 @@
                 handDetected = false;
                 gestureType = "none";
                 trailPoints.length = 0;
-                targetDistance = 12;
+                targetDistance = 4.6;
                 orbitAngle = 0;
-                planeGroup.position.set(0, 0, 0);
+                planeGroup.position.set(0, -0.4, -4.5);
                 planeGroup.rotation.set(0, 0, 0);
             });
 
@@ -953,12 +980,41 @@
             let isRecording = false;
             let activeRecordingExtension = "mp4";
 
+            function drawVideoCover(ctx, video, width, height) {
+                const vWidth = video.videoWidth || width;
+                const vHeight = video.videoHeight || height;
+                if (!vWidth || !vHeight) {
+                    ctx.drawImage(video, 0, 0, width, height);
+                    return;
+                }
+                const videoAspect = vWidth / vHeight;
+                const canvasAspect = width / height;
+                let sx = 0;
+                let sy = 0;
+                let sWidth = vWidth;
+                let sHeight = vHeight;
+                if (videoAspect > canvasAspect) {
+                    sHeight = vHeight;
+                    sWidth = sHeight * canvasAspect;
+                    sx = (vWidth - sWidth) / 2;
+                } else {
+                    sWidth = vWidth;
+                    sHeight = sWidth / canvasAspect;
+                    sy = (vHeight - sHeight) / 2;
+                }
+                ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, width, height);
+            }
+
             recordBtn.addEventListener("click", async () => {
                 if (!isRecording) {
                     try {
                         const recordCanvas = document.createElement("canvas");
-                        recordCanvas.width = 1280;
-                        recordCanvas.height = 720;
+                        const canvasWidth =
+                            canvas3D.width || canvas3D.clientWidth || window.innerWidth;
+                        const canvasHeight =
+                            canvas3D.height || canvas3D.clientHeight || window.innerHeight;
+                        recordCanvas.width = canvasWidth;
+                        recordCanvas.height = canvasHeight;
                         const ctx = recordCanvas.getContext("2d");
 
                         const canvasStream = recordCanvas.captureStream(30);
@@ -967,16 +1023,12 @@
                             if (!isRecording) {
                                 return;
                             }
-                            ctx.save();
-                            ctx.scale(-1, 1);
-                            ctx.drawImage(
+                            drawVideoCover(
+                                ctx,
                                 videoElement,
-                                -recordCanvas.width,
-                                0,
                                 recordCanvas.width,
                                 recordCanvas.height,
                             );
-                            ctx.restore();
                             ctx.drawImage(canvas3D, 0, 0, recordCanvas.width, recordCanvas.height);
                             requestAnimationFrame(drawFrame);
                         }
@@ -1018,12 +1070,23 @@
                         };
                         mediaRecorder.onstop = () => {
                             const blob = new Blob(recordedChunks, { type: selectedMime.type });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement("a");
-                            a.href = url;
-                            a.download = `kraken-airlines-${Date.now()}.${activeRecordingExtension}`;
-                            a.click();
-                            URL.revokeObjectURL(url);
+                            const fileName = `kraken-airlines-${Date.now()}.${activeRecordingExtension}`;
+                            const file = new File([blob], fileName, { type: selectedMime.type });
+
+                            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                                navigator
+                                    .share({ files: [file], title: "Kraken Airlines Flight" })
+                                    .catch((err) => {
+                                        console.warn("Share cancelled or failed", err);
+                                    });
+                            } else {
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement("a");
+                                a.href = url;
+                                a.download = fileName;
+                                a.click();
+                                URL.revokeObjectURL(url);
+                            }
                         };
 
                         isRecording = true;
@@ -1077,18 +1140,24 @@
 
                 switch (currentState) {
                     case PlaneState.IDLE:
-                        // Gentle idle animation
-                        planeGroup.rotation.y += Math.sin(time * 2) * 0.002;
-                        planeGroup.rotation.z = Math.cos(time * 0.7) * 0.05;
+                        planeGroup.position.x += (0 - planeGroup.position.x) * 0.08;
+                        planeGroup.position.y += (-0.4 - planeGroup.position.y) * 0.08;
+                        planeGroup.position.z += (-4.5 - planeGroup.position.z) * 0.08;
+                        planeGroup.rotation.x += (0 - planeGroup.rotation.x) * 0.08;
+                        planeGroup.rotation.z +=
+                            (Math.cos(time * 1.4) * 0.03 - planeGroup.rotation.z) * 0.08;
                         trailPoints.length = 0;
                         break;
 
                     case PlaneState.DRAGGING:
                         if (handDetected && gestureType === "pinch") {
-                            // Follow hand exactly
-                            planeGroup.position.x = smoothedHandX * 4;
-                            planeGroup.position.y = smoothedHandY * 3;
-                            planeGroup.position.z = handZ * -10;
+                            const targetX = THREE.MathUtils.clamp(smoothedHandX * 4.2, -3.2, 3.2);
+                            const targetY = THREE.MathUtils.clamp(smoothedHandY * 3.2, -2.2, 2.6);
+                            planeGroup.position.x += (targetX - planeGroup.position.x) * 0.25;
+                            planeGroup.position.y += (targetY - planeGroup.position.y) * 0.25;
+                            planeGroup.position.z += (-6 - planeGroup.position.z) * 0.2;
+                            planeGroup.rotation.z += (palmTilt.roll - planeGroup.rotation.z) * 0.2;
+                            planeGroup.rotation.x += (palmTilt.pitch - planeGroup.rotation.x) * 0.2;
                         }
                         trailPoints.length = 0;
                         break;
@@ -1097,10 +1166,11 @@
                         // Smooth circular orbit in center of screen
                         orbitAngle += orbitSpeed;
 
-                        const targetX = Math.cos(orbitAngle) * targetDistance;
-                        const targetY = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
-                        const targetZ =
-                            Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
+                        const orbitRadius = THREE.MathUtils.clamp(targetDistance, 3.8, 5.6);
+                        targetDistance = orbitRadius;
+                        const targetX = Math.cos(orbitAngle) * orbitRadius;
+                        const targetY = Math.sin(orbitAngle * 0.55) * 1.4;
+                        const targetZ = -6.5 + Math.sin(orbitAngle) * 1.2;
 
                         // Smooth interpolation to target position
                         planeGroup.position.x += (targetX - planeGroup.position.x) * 0.05;
@@ -1109,10 +1179,9 @@
 
                         // Look at next point on orbit
                         const lookAheadAngle = orbitAngle + 0.3;
-                        const lookX = Math.cos(lookAheadAngle) * targetDistance;
-                        const lookY = Math.sin(lookAheadAngle * 0.7) * (targetDistance * 0.3);
-                        const lookZ =
-                            Math.sin(lookAheadAngle) * targetDistance - targetDistance * 0.5;
+                        const lookX = Math.cos(lookAheadAngle) * orbitRadius;
+                        const lookY = Math.sin(lookAheadAngle * 0.55) * 1.2;
+                        const lookZ = -6.5 + Math.sin(lookAheadAngle) * 1.2;
 
                         const lookTarget = new THREE.Vector3(lookX, lookY, lookZ);
                         const currentLook = new THREE.Vector3();
@@ -1121,15 +1190,23 @@
                         const targetDir = lookTarget.sub(planeGroup.position).normalize();
                         planeGroup.lookAt(planeGroup.position.clone().add(targetDir));
 
-                        // Add slight roll
-                        planeGroup.rotation.z = Math.sin(orbitAngle) * 0.3;
+                        planeGroup.rotation.z += (palmTilt.roll - planeGroup.rotation.z) * 0.08;
+                        planeGroup.rotation.x += (palmTilt.pitch - planeGroup.rotation.x) * 0.08;
                         break;
 
                     case PlaneState.CONTROLLED:
                         if (handDetected && gestureType === "pointing") {
                             // Smoothly guide plane toward hand direction
-                            const targetControlX = smoothedHandX * 6;
-                            const targetControlY = smoothedHandY * 5;
+                            const targetControlX = THREE.MathUtils.clamp(
+                                smoothedHandX * 5.2,
+                                -3.5,
+                                3.5,
+                            );
+                            const targetControlY = THREE.MathUtils.clamp(
+                                smoothedHandY * 4.4,
+                                -2.3,
+                                2.8,
+                            );
 
                             planeGroup.position.x +=
                                 (targetControlX - planeGroup.position.x) * 0.08;
@@ -1137,8 +1214,7 @@
                                 (targetControlY - planeGroup.position.y) * 0.08;
 
                             // Maintain forward motion
-                            planeGroup.position.z +=
-                                (-targetDistance * 0.5 - planeGroup.position.z) * 0.05;
+                            planeGroup.position.z += (-6.2 - planeGroup.position.z) * 0.05;
 
                             // Look at direction of movement
                             const moveDir = new THREE.Vector3(
@@ -1157,6 +1233,8 @@
                             targetQuat.setFromRotationMatrix(lookMatrix);
                             planeGroup.quaternion.slerp(targetQuat, 0.1);
                         }
+                        planeGroup.rotation.z += (palmTilt.roll - planeGroup.rotation.z) * 0.12;
+                        planeGroup.rotation.x += (palmTilt.pitch - planeGroup.rotation.x) * 0.12;
                         break;
 
                     case PlaneState.TRICK:
@@ -1166,11 +1244,16 @@
 
                         // Continue orbiting during trick
                         orbitAngle += orbitSpeed;
-                        planeGroup.position.x = Math.cos(orbitAngle) * targetDistance;
-                        planeGroup.position.y = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
-                        planeGroup.position.z =
-                            Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
+                        const trickRadius = THREE.MathUtils.clamp(targetDistance, 3.8, 5.6);
+                        planeGroup.position.x = Math.cos(orbitAngle) * trickRadius;
+                        planeGroup.position.y = Math.sin(orbitAngle * 0.55) * 1.2;
+                        planeGroup.position.z = -6.5 + Math.sin(orbitAngle) * 1.2;
                         break;
+                }
+
+                if (!handDetected) {
+                    palmTilt.roll *= 0.9;
+                    palmTilt.pitch *= 0.9;
                 }
 
                 // Update trail for all states except IDLE and DRAGGING
