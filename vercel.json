@@ -2,7 +2,7 @@
     "rewrites": [
         {
             "source": "/",
-            "destination": "/paper-plane-ar_9.html"
+            "destination": "/paper-plane-ar_10.html"
         }
     ]
 }
