@@ -634,9 +634,9 @@
         scene.add(trailLine);
 
         function updateTrail() {
-            if (currentState === PlaneState.FLYING || 
+            if (currentState === PlaneState.ORBITING || 
                 currentState === PlaneState.CONTROLLED ||
-                currentState === PlaneState.LOOPING) {
+                currentState === PlaneState.TRICK) {
                 trailPoints.push(planeGroup.position.clone());
             }
             
