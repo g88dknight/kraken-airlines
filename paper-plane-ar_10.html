@@ -543,6 +543,7 @@
 
         let previousPosition = planeGroup.position.clone();
         const boomerangBaseZ = -5.2;
+        const TWO_PI = Math.PI * 2;
         let boomerangAngle = Math.PI / 2;
         let boomerangRadius = 4.2;
         let boomerangDepth = 3.4;
@@ -638,10 +639,8 @@
                 planeGroup.position.z - boomerangBaseZ,
                 planeGroup.position.x
             );
-            if (boomerangAngle < 0) {
-                boomerangAngle += Math.PI * 2;
-            }
-            previousPosition.copy(planeGroup.position.clone());
+            boomerangAngle = (boomerangAngle % TWO_PI + TWO_PI) % TWO_PI;
+            previousPosition.copy(planeGroup.position);
         }
 
         function resetExperience(showPrompt = false) {
@@ -687,11 +686,11 @@
 
         function updateBoomerangOrbit() {
             boomerangAngle += boomerangSpeed * boomerangDirection;
-            if (boomerangAngle > Math.PI * 2) {
-                boomerangAngle -= Math.PI * 2;
+            if (boomerangAngle > TWO_PI) {
+                boomerangAngle = TWO_PI - (boomerangAngle - TWO_PI);
                 boomerangDirection *= -1;
             } else if (boomerangAngle < 0) {
-                boomerangAngle += Math.PI * 2;
+                boomerangAngle = -boomerangAngle;
                 boomerangDirection *= -1;
             }
 
