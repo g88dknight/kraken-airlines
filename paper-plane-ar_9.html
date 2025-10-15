@@ -46,50 +46,83 @@
 
         .brand {
             position: absolute;
-            top: 32px;
+            top: 36px;
             left: 50%;
             transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
             color: white;
-            font-size: 20px;
-            font-weight: 600;
-            z-index: 100;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
-            letter-spacing: 0.5px;
+            z-index: 120;
         }
 
-        .brand span {
-            font-weight: 700;
+        .brand-tagline {
+            font-size: 12px;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .brand-logo {
+            height: 44px;
+            filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.45));
         }
 
         .gesture-indicator {
-            position: absolute;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            padding: 8px 16px;
-            color: white;
-            font-weight: 500;
-            font-size: 13px;
-            z-index: 100;
-            transition: all 0.3s;
-            opacity: 0;
-            pointer-events: none;
-            display: flex;
+            min-width: 148px;
+            display: inline-flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(22px);
+            color: #111;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 0.02em;
+            text-shadow: none;
+            mix-blend-mode: screen;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .gesture-indicator.show {
             opacity: 1;
         }
 
-        .gesture-icon {
-            font-size: 18px;
-            display: inline-flex;
+        .gesture-emoji {
+            font-size: 16px;
+        }
+
+        .gesture-label {
+            color: rgba(17, 17, 17, 0.85);
+        }
+
+        .status-toast {
+            position: absolute;
+            bottom: 132px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 15, 20, 0.82);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(18px);
+            font-weight: 500;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 110;
+        }
+
+        .status-toast.show {
+            opacity: 1;
         }
 
         .action-bar {
@@ -98,36 +131,35 @@
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 16px;
             align-items: center;
-            z-index: 100;
+            gap: 16px;
+            z-index: 120;
         }
 
+        .action-btn,
         .record-btn,
-        .action-btn {
-            position: relative;
-            bottom: auto;
-            left: auto;
-            transform: none;
-            background: rgba(255, 255, 255, 0.2);
+        .icon-btn {
+            background: rgba(255, 255, 255, 0.22);
             backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.28);
             border-radius: 60px;
-            padding: 14px 32px;
             color: white;
-            font-weight: 500;
-            font-size: 15px;
-            cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            z-index: 100;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
         }
 
-        .record-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
+        .action-btn:hover,
+        .record-btn:hover,
+        .icon-btn:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.28);
             transform: scale(1.05);
         }
 
@@ -152,43 +184,10 @@
             border-radius: 50%;
         }
 
-        .action-btn {
-            padding: 14px 28px;
-            font-size: 15px;
-            font-weight: 500;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
-        }
-
         .icon-btn {
             width: 56px;
             height: 56px;
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .icon-btn:hover:not(.disabled) {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.08);
+            padding: 0;
         }
 
         .icon-btn.disabled {
@@ -245,7 +244,7 @@
         }
 
         .controls-content {
-            background: rgba(24, 24, 24, 0.95);
+            background: rgba(40, 40, 40, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px;
             padding: 32px;
@@ -299,22 +298,15 @@
             align-items: center;
             gap: 16px;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: border 0.2s ease, background 0.2s ease;
-        }
-
-        .control-item.highlight {
-            border-color: rgba(255, 255, 255, 0.24);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .control-emoji {
-            font-size: 28px;
-            width: 44px;
+            font-size: 32px;
+            width: 48px;
             text-align: center;
         }
 
@@ -377,7 +369,12 @@
     <canvas id="canvasElement"></canvas>
 
     <div class="brand">
-        <img src="assets/logo-air.svg" alt="Kraken Airlines logo">
+        <div class="brand-tagline">made æspecially for you</div>
+        <img src="assets/logo-air.svg" alt="Kraken Airlines logo" class="brand-logo">
+        <div class="gesture-indicator" id="gestureIndicator">
+            <span class="gesture-emoji" id="gestureEmoji">✈️</span>
+            <span class="gesture-label" id="gestureLabel">Orbiting</span>
+        </div>
     </div>
 
     <button class="help-btn" id="helpBtn">
@@ -393,20 +390,20 @@
         </button>
     </div>
 
-    <div class="gesture-indicator" id="gestureIndicator"></div>
+    <div class="status-toast" id="statusToast"></div>
 
     <div class="controls-popup" id="controlsPopup">
         <div class="controls-content">
             <div class="controls-header">
                 <div class="controls-title">
-                    🖐️ Gesture Controls
+                    ✋ Gesture Controls
                 </div>
                 <button class="close-btn" id="closeBtn">
                     <i data-lucide="x" size="20"></i>
                 </button>
             </div>
 
-            <div class="control-item highlight">
+            <div class="control-item">
                 <div class="control-emoji">🤏</div>
                 <div class="control-text">
                     <strong>Pinch</strong>
@@ -415,7 +412,7 @@
             </div>
 
             <div class="control-item">
-                <div class="control-emoji">☝️</div>
+                <div class="control-emoji">👆</div>
                 <div class="control-text">
                     <strong>Point (Index Finger)</strong>
                     <span>Guide plane direction smoothly</span>
@@ -449,9 +446,9 @@
     </div>
 
     <div class="action-bar">
-        <button class="action-btn" id="homeBtn">
-            <i data-lucide="rotate-ccw" size="20"></i>
-            <span>Reset</span>
+        <button class="action-btn" id="toBoardingBtn">
+            <i data-lucide="undo-2" size="18"></i>
+            <span>To Boarding</span>
         </button>
 
         <button class="record-btn" id="recordBtn">
@@ -539,186 +536,88 @@
 
         createPaperPlane();
 
-        planeGroup.position.set(0, 0.2, -4.5);
-
-        let previousPosition = planeGroup.position.clone();
-        const boomerangBaseZ = -5.2;
-        const TWO_PI = Math.PI * 2;
-        let boomerangAngle = Math.PI / 2;
-        let boomerangRadius = 4.2;
-        let boomerangDepth = 3.4;
-        let boomerangSpeed = 0.02;
-        let boomerangDirection = 1;
-        let trickStartTime = 0;
-
         // Plane States
         const PlaneState = {
             IDLE: 'idle',
             DRAGGING: 'dragging',
-            FLYING: 'flying',
-            CONTROLLED: 'controlled',
+            ORBITING: 'orbiting', // Auto-circling flight
+            CONTROLLED: 'controlled', // Pointing gesture control
             TRICK: 'trick'
         };
 
-        let currentState = PlaneState.IDLE;
+        let currentState = PlaneState.ORBITING;
         let planeVelocity = new THREE.Vector3(0, 0, 0);
+        let targetDirection = new THREE.Vector3(0, 0, -1);
+        let targetDistance = 12; // Distance from center
+        let orbitAngle = 0;
+        let orbitSpeed = 0.01;
         let smoothedHandX = 0;
         let smoothedHandY = 0;
 
+        const gestureIndicatorEl = document.getElementById('gestureIndicator');
+        const gestureEmojiEl = document.getElementById('gestureEmoji');
+        const gestureLabelEl = document.getElementById('gestureLabel');
+        const statusToastEl = document.getElementById('statusToast');
+        let statusToastTimeout = null;
+
         // Gesture display
         function updateGestureDisplay(gesture) {
-            const indicator = document.getElementById('gestureIndicator');
-            let icon = '';
-            let text = '';
-            let stateText = '';
-
-            switch (gesture) {
-                case 'pinch':
-                    icon = '🤏';
-                    text = 'Drag mode';
-                    break;
-                case 'pointing':
-                    icon = '☝️';
-                    text = 'Manual guidance';
-                    break;
-                case 'peace':
-                    icon = '✌️';
-                    text = 'Trick queued';
-                    break;
-                case 'open_palm':
-                    icon = '🖐️';
-                    text = 'Orbit widening';
-                    break;
-                case 'fist':
-                    icon = '✊';
-                    text = 'Orbit tightening';
-                    break;
-                default:
-                    icon = '';
-                    text = '';
-            }
+            let emoji = '✈️';
+            let label = 'Orbiting';
 
             switch (currentState) {
-                case PlaneState.FLYING:
-                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Boomerang</span>';
+                case PlaneState.IDLE:
+                    emoji = '⏸️';
+                    label = 'Paused';
+                    break;
+                case PlaneState.ORBITING:
+                    emoji = '✈️';
+                    label = 'Orbiting';
                     break;
                 case PlaneState.CONTROLLED:
-                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Manual</span>';
+                    emoji = '🧭';
+                    label = 'Manual';
                     break;
                 case PlaneState.TRICK:
-                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Trick</span>';
+                    emoji = '✌️';
+                    label = 'Trick';
                     break;
                 case PlaneState.DRAGGING:
-                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Drag</span>';
-                    break;
-                case PlaneState.IDLE:
-                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Idle</span>';
+                    emoji = '🤏';
+                    label = 'Dragging';
                     break;
             }
 
-            if (icon || text || stateText) {
-                const parts = [];
-                if (icon) {
-                    parts.push(`<span class="gesture-icon">${icon}</span>`);
+            if (gesture) {
+                switch (gesture) {
+                    case 'pinch':
+                        emoji = '🤏';
+                        label = 'Dragging';
+                        break;
+                    case 'pointing':
+                        emoji = '👆';
+                        label = 'Manual';
+                        break;
+                    case 'peace':
+                        emoji = '✌️';
+                        label = 'Trick';
+                        break;
+                    case 'open_palm':
+                        emoji = '🖐️';
+                        label = 'Zoom Out';
+                        break;
+                    case 'fist':
+                        emoji = '✊';
+                        label = 'Zoom In';
+                        break;
+                    default:
+                        break;
                 }
-                if (text) {
-                    parts.push(`<span>${text}</span>`);
-                }
-                if (stateText) {
-                    parts.push(stateText);
-                }
-                indicator.innerHTML = parts.join('');
-                indicator.classList.add('show');
-            } else {
-                indicator.classList.remove('show');
-            }
-        }
-
-        function syncBoomerangToPlane() {
-            boomerangAngle = Math.atan2(
-                planeGroup.position.z - boomerangBaseZ,
-                planeGroup.position.x
-            );
-            boomerangAngle = (boomerangAngle % TWO_PI + TWO_PI) % TWO_PI;
-            previousPosition.copy(planeGroup.position);
-        }
-
-        function resetExperience(showPrompt = false) {
-            currentState = PlaneState.IDLE;
-            planeVelocity.set(0, 0, 0);
-            planeGroup.position.set(0, 0.2, -4.5);
-            planeGroup.rotation.set(0, 0, 0);
-            boomerangAngle = Math.PI / 2;
-            boomerangRadius = 4.2;
-            boomerangDepth = 3.4;
-            boomerangSpeed = 0.02;
-            boomerangDirection = 1;
-            previousPosition.copy(planeGroup.position);
-            trailPoints.length = 0;
-            gestureType = 'none';
-            lastGesture = 'none';
-            updateGestureDisplay('none');
-            if (showPrompt) {
-                showIndicator('Back to start');
-            }
-        }
-
-        function prepareBoomerangLaunch() {
-            boomerangRadius = THREE.MathUtils.randFloat(3.6, 5.4);
-            boomerangDepth = THREE.MathUtils.randFloat(2.8, 4.8);
-            boomerangSpeed = THREE.MathUtils.randFloat(0.018, 0.026);
-            boomerangDirection = Math.random() > 0.5 ? 1 : -1;
-            const frontAnchor = boomerangDirection > 0 ? Math.PI / 2 : (3 * Math.PI) / 2;
-            boomerangAngle = frontAnchor + (Math.random() - 0.5) * 0.4;
-            const startRadius = boomerangRadius + Math.sin(boomerangAngle * 1.4) * 1.1;
-            const startX = Math.cos(boomerangAngle) * startRadius;
-            const startY = Math.sin(boomerangAngle * 1.8) * 1.2;
-            const startZ = boomerangBaseZ + Math.sin(boomerangAngle) * boomerangDepth;
-            planeGroup.position.set(startX, startY, startZ);
-            previousPosition.copy(planeGroup.position);
-            syncBoomerangToPlane();
-        }
-
-        function adjustOrbit(delta) {
-            boomerangRadius = THREE.MathUtils.clamp(boomerangRadius + delta, 3, 6.8);
-            boomerangDepth = THREE.MathUtils.clamp(boomerangDepth + delta * 0.8, 2.4, 5.6);
-        }
-
-        function updateBoomerangOrbit() {
-            boomerangAngle += boomerangSpeed * boomerangDirection;
-            if (boomerangAngle > TWO_PI) {
-                boomerangAngle = TWO_PI - (boomerangAngle - TWO_PI);
-                boomerangDirection *= -1;
-            } else if (boomerangAngle < 0) {
-                boomerangAngle = -boomerangAngle;
-                boomerangDirection *= -1;
             }
 
-            const radiusOffset = Math.sin(boomerangAngle * 1.4) * 1.1;
-            const targetRadius = boomerangRadius + radiusOffset;
-            const targetPos = new THREE.Vector3(
-                Math.cos(boomerangAngle) * targetRadius,
-                Math.sin(boomerangAngle * 1.8) * 1.25,
-                boomerangBaseZ + Math.sin(boomerangAngle) * boomerangDepth
-            );
-
-            const lerpFactor = 0.12 + Math.min(boomerangSpeed * 3, 0.2);
-            const newPos = planeGroup.position.clone().lerp(targetPos, lerpFactor);
-            planeVelocity.copy(newPos.clone().sub(previousPosition));
-            previousPosition.copy(newPos);
-            planeGroup.position.copy(newPos);
-
-            const lookAheadAngle = boomerangAngle + 0.22 * boomerangDirection;
-            const lookAheadRadius = boomerangRadius + Math.sin(lookAheadAngle * 1.4) * 1.1;
-            const lookTarget = new THREE.Vector3(
-                Math.cos(lookAheadAngle) * lookAheadRadius,
-                Math.sin(lookAheadAngle * 1.8) * 1.25,
-                boomerangBaseZ + Math.sin(lookAheadAngle) * boomerangDepth
-            );
-            planeGroup.lookAt(lookTarget);
-            const lookRotationZ = planeGroup.rotation.z;
-            const bankOffset = THREE.MathUtils.clamp(-planeVelocity.x * 4, -0.7, 0.7);
-            return { lookRotationZ, bankOffset };
+            gestureEmojiEl.textContent = emoji;
+            gestureLabelEl.textContent = label;
+            gestureIndicatorEl.classList.add('show');
         }
 
         // Trail System
@@ -737,7 +636,7 @@
         function updateTrail() {
             if (currentState === PlaneState.FLYING || 
                 currentState === PlaneState.CONTROLLED ||
-                currentState === PlaneState.TRICK) {
+                currentState === PlaneState.LOOPING) {
                 trailPoints.push(planeGroup.position.clone());
             }
             
@@ -858,28 +757,21 @@
                 // Pinch - enter drag mode
                 if (gestureType === 'pinch' && currentState !== PlaneState.DRAGGING) {
                     currentState = PlaneState.DRAGGING;
-                    updateGestureDisplay(gestureType);
                 } else if (gestureType !== 'pinch' && currentState === PlaneState.DRAGGING) {
-                    currentState = PlaneState.FLYING;
-                    syncBoomerangToPlane();
-                    updateGestureDisplay(gestureType);
+                    currentState = PlaneState.ORBITING;
                 }
                 
                 // Pointing - enter controlled mode
                 if (gestureType === 'pointing') {
-                    if (currentState === PlaneState.FLYING) {
+                    if (currentState === PlaneState.ORBITING) {
                         currentState = PlaneState.CONTROLLED;
-                        planeVelocity.set(0, 0, 0);
-                        updateGestureDisplay(gestureType);
                     }
                 } else if (currentState === PlaneState.CONTROLLED && gestureType !== 'pointing') {
-                    currentState = PlaneState.FLYING;
-                    syncBoomerangToPlane();
-                    updateGestureDisplay(gestureType);
+                    currentState = PlaneState.ORBITING;
                 }
                 
                 // Peace - trick
-                if (gestureType === 'peace' && currentState === PlaneState.FLYING) {
+                if (gestureType === 'peace' && currentState === PlaneState.ORBITING) {
                     if (lastGesture !== 'peace') {
                         doTrick();
                     }
@@ -887,50 +779,44 @@
                 
                 // Open palm - zoom out
                 if (gestureType === 'open_palm') {
-                    adjustOrbit(0.03);
+                    targetDistance = Math.min(targetDistance + 0.2, 20);
                 }
                 
+                // Fist - zoom in
                 if (gestureType === 'fist') {
-                    adjustOrbit(-0.03);
+                    targetDistance = Math.max(targetDistance - 0.2, 6);
                 }
                 
                 lastGesture = gestureType;
             } else {
                 handDetected = false;
                 gestureType = 'none';
-                if (currentState === PlaneState.DRAGGING || currentState === PlaneState.CONTROLLED) {
-                    currentState = PlaneState.FLYING;
-                    syncBoomerangToPlane();
-                }
                 updateGestureDisplay('none');
-                lastGesture = 'none';
+                if (currentState === PlaneState.DRAGGING || currentState === PlaneState.CONTROLLED) {
+                    currentState = PlaneState.ORBITING;
+                }
             }
         }
 
         function doTrick() {
             currentState = PlaneState.TRICK;
-            trickStartTime = performance.now();
-            showIndicator('Barrel Roll!');
-            updateGestureDisplay('peace');
+            showIndicator('✌️ Barrel Roll!');
             setTimeout(() => {
                 if (currentState === PlaneState.TRICK) {
-                    currentState = PlaneState.FLYING;
-                    syncBoomerangToPlane();
-                    updateGestureDisplay(gestureType);
+                    currentState = PlaneState.ORBITING;
                 }
             }, 1500);
         }
 
         function showIndicator(text) {
-            const indicator = document.getElementById('gestureIndicator');
-            const currentText = indicator.textContent;
-            indicator.textContent = text;
-            indicator.classList.add('show');
-            
-            setTimeout(() => {
-                if (indicator.textContent === text) {
-                    indicator.classList.remove('show');
-                }
+            if (!statusToastEl) {
+                return;
+            }
+            statusToastEl.textContent = text;
+            statusToastEl.classList.add('show');
+            clearTimeout(statusToastTimeout);
+            statusToastTimeout = setTimeout(() => {
+                statusToastEl.classList.remove('show');
             }, 2000);
         }
 
@@ -938,7 +824,9 @@
         let cameraInstance = null;
         let availableCameras = [];
         let currentCameraIndex = 0;
+        const loadingOverlay = document.getElementById('loading');
         const cameraToggleBtn = document.getElementById('cameraToggleBtn');
+
         if (cameraToggleBtn) {
             cameraToggleBtn.disabled = true;
             cameraToggleBtn.classList.add('disabled');
@@ -985,32 +873,37 @@
                 height: 720,
                 deviceId: deviceId || undefined
             });
+            
             try {
                 await cameraInstance.start();
-                document.getElementById('loading').style.display = 'none';
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
                 await loadAvailableCameras();
                 if (deviceId) {
-                    const foundIndex = availableCameras.findIndex((cam) => cam.deviceId === deviceId);
-                    if (foundIndex >= 0) {
-                        currentCameraIndex = foundIndex;
+                    const matchedIndex = availableCameras.findIndex((cam) => cam.deviceId === deviceId);
+                    if (matchedIndex >= 0) {
+                        currentCameraIndex = matchedIndex;
                     }
                 }
             } catch (err) {
                 console.error('Camera error:', err);
-                document.getElementById('loading').innerHTML = `
-                    <div style="color: #ef4444; text-align: center;">
-                        <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
-                        <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
-                        <div style="font-size: 14px; opacity: 0.8;">Please allow camera access to use this app</div>
-                        <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
-                    </div>
-                `;
+                if (loadingOverlay) {
+                    loadingOverlay.innerHTML = `
+                        <div style="color: #ef4444; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
+                            <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
+                            <div style="font-size: 14px; opacity: 0.8;">Please allow camera access to use this app</div>
+                            <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
+                        </div>
+                    `;
+                }
             }
         }
 
         if (cameraToggleBtn) {
             cameraToggleBtn.addEventListener('click', async () => {
-                if (availableCameras.length < 2 || cameraToggleBtn.disabled) {
+                if (cameraToggleBtn.disabled || availableCameras.length < 2) {
                     return;
                 }
                 cameraToggleBtn.disabled = true;
@@ -1024,6 +917,7 @@
         }
 
         startCamera();
+        updateGestureDisplay('none');
 
         // UI Controls
         document.getElementById('helpBtn').addEventListener('click', () => {
@@ -1032,24 +926,25 @@
 
         document.getElementById('launchBtn').addEventListener('click', () => {
             if (currentState === PlaneState.IDLE || currentState === PlaneState.DRAGGING) {
-                prepareBoomerangLaunch();
-                planeVelocity.set(0, 0, 0);
-                currentState = PlaneState.FLYING;
-                trailPoints.length = 0;
-                updateGestureDisplay(gestureType);
-                showIndicator('Boomerang flight engaged');
+                currentState = PlaneState.ORBITING;
+                showIndicator('🚀 Plane launched!');
             }
         });
 
         document.getElementById('landBtn').addEventListener('click', () => {
             if (currentState !== PlaneState.IDLE) {
-                resetExperience(false);
-                showIndicator('Plane landed');
+                currentState = PlaneState.IDLE;
+                trailPoints.length = 0;
+                showIndicator('🛬 Plane landed');
             }
         });
 
-        document.getElementById('homeBtn').addEventListener('click', () => {
-            resetExperience(true);
+        document.getElementById('toBoardingBtn').addEventListener('click', () => {
+            if (document.referrer) {
+                window.history.back();
+            } else {
+                window.location.href = '/';
+            }
         });
 
         document.getElementById('closeBtn').addEventListener('click', () => {
@@ -1066,7 +961,6 @@
         let mediaRecorder;
         let recordedChunks = [];
         let isRecording = false;
-        let recordingAnimationFrame;
 
         document.getElementById('recordBtn').addEventListener('click', async () => {
             if (!isRecording) {
@@ -1074,69 +968,46 @@
                     const recordCanvas = document.createElement('canvas');
                     recordCanvas.width = 1280;
                     recordCanvas.height = 720;
-                    const ctx = recordCanvas.getContext('2d', { willReadFrequently: true });
+                    const ctx = recordCanvas.getContext('2d');
                     
                     const canvasStream = recordCanvas.captureStream(30);
                     
                     function drawFrame() {
                         if (isRecording) {
-                            // Clear canvas
-                            ctx.clearRect(0, 0, recordCanvas.width, recordCanvas.height);
-                            
-                            // Draw flipped video
                             ctx.save();
                             ctx.scale(-1, 1);
                             ctx.drawImage(videoElement, -recordCanvas.width, 0, recordCanvas.width, recordCanvas.height);
                             ctx.restore();
-                            
-                            // Draw 3D overlay
                             ctx.drawImage(canvas3D, 0, 0, recordCanvas.width, recordCanvas.height);
-                            
-                            recordingAnimationFrame = requestAnimationFrame(drawFrame);
+                            requestAnimationFrame(drawFrame);
                         }
                     }
-                    
-                    // Check for codec support
-                    let mimeType = 'video/webm;codecs=vp9';
-                    if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')) {
-                        mimeType = 'video/webm;codecs=vp9,opus';
-                    } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
-                        mimeType = 'video/webm;codecs=vp8';
-                    } else if (MediaRecorder.isTypeSupported('video/webm')) {
-                        mimeType = 'video/webm';
-                    }
+                    drawFrame();
+
+                    // Try H.264 for MP4 compatibility
+                    const mimeType = MediaRecorder.isTypeSupported('video/mp4') ? 'video/mp4' :
+                                    MediaRecorder.isTypeSupported('video/webm;codecs=h264') ? 'video/webm;codecs=h264' :
+                                    'video/webm;codecs=vp9';
 
                     mediaRecorder = new MediaRecorder(canvasStream, {
                         mimeType: mimeType,
-                        videoBitsPerSecond: 8000000
+                        videoBitsPerSecond: 5000000
                     });
 
                     recordedChunks = [];
-                    
-                    mediaRecorder.ondataavailable = (e) => { 
-                        if (e.data && e.data.size > 0) {
-                            recordedChunks.push(e.data);
-                        }
-                    };
-                    
+                    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
                     mediaRecorder.onstop = () => {
-                        cancelAnimationFrame(recordingAnimationFrame);
-                        
-                        if (recordedChunks.length > 0) {
-                            const blob = new Blob(recordedChunks, { type: mimeType });
-                            const url = URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.download = `kraken-airlines-${Date.now()}.webm`;
-                            document.body.appendChild(a);
-                            a.click();
-                            document.body.removeChild(a);
-                            setTimeout(() => URL.revokeObjectURL(url), 100);
-                        }
+                        const blob = new Blob(recordedChunks, { type: mimeType });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        const extension = mimeType.includes('mp4') ? 'mp4' : 'webm';
+                        a.download = `kraken-airlines-${Date.now()}.${extension}`;
+                        a.click();
+                        URL.revokeObjectURL(url);
                     };
 
-                    mediaRecorder.start(100); // Capture every 100ms
-                    drawFrame();
+                    mediaRecorder.start();
                     isRecording = true;
                     
                     const btn = document.getElementById('recordBtn');
@@ -1144,12 +1015,9 @@
                     btn.querySelector('span').textContent = 'Stop';
                 } catch (err) {
                     console.error('Recording error:', err);
-                    alert('Recording failed: ' + err.message);
                 }
             } else {
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                }
+                mediaRecorder.stop();
                 isRecording = false;
                 
                 const btn = document.getElementById('recordBtn');
@@ -1160,7 +1028,6 @@
 
         // Animation Loop
         let time = 0;
-        const bounds = { x: 7, y: 5, zMin: -12, zMax: 2 };
         
         function animate() {
             requestAnimationFrame(animate);
@@ -1168,78 +1035,94 @@
 
             switch(currentState) {
                 case PlaneState.IDLE:
-                    planeGroup.rotation.y = Math.sin(time * 2) * 0.1;
+                    // Gentle idle animation
+                    planeGroup.rotation.y += Math.sin(time * 2) * 0.002;
                     planeGroup.rotation.z = Math.cos(time * 0.7) * 0.05;
-                    planeVelocity.set(0, 0, 0);
-                    previousPosition.copy(planeGroup.position);
                     trailPoints.length = 0;
                     break;
 
                 case PlaneState.DRAGGING:
                     if (handDetected && gestureType === 'pinch') {
+                        // Follow hand exactly
                         planeGroup.position.x = smoothedHandX * 4;
                         planeGroup.position.y = smoothedHandY * 3;
                         planeGroup.position.z = handZ * -10;
-                        previousPosition.copy(planeGroup.position);
-                        planeVelocity.set(0, 0, 0);
                     }
                     trailPoints.length = 0;
                     break;
 
-                case PlaneState.FLYING: {
-                    const { lookRotationZ, bankOffset } = updateBoomerangOrbit();
-                    planeGroup.rotation.z = lookRotationZ + bankOffset;
+                case PlaneState.ORBITING:
+                    // Smooth circular orbit in center of screen
+                    orbitAngle += orbitSpeed;
+                    
+                    const targetX = Math.cos(orbitAngle) * targetDistance;
+                    const targetY = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
+                    const targetZ = Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
+                    
+                    // Smooth interpolation to target position
+                    planeGroup.position.x += (targetX - planeGroup.position.x) * 0.05;
+                    planeGroup.position.y += (targetY - planeGroup.position.y) * 0.05;
+                    planeGroup.position.z += (targetZ - planeGroup.position.z) * 0.05;
+                    
+                    // Look at next point on orbit
+                    const lookAheadAngle = orbitAngle + 0.3;
+                    const lookX = Math.cos(lookAheadAngle) * targetDistance;
+                    const lookY = Math.sin(lookAheadAngle * 0.7) * (targetDistance * 0.3);
+                    const lookZ = Math.sin(lookAheadAngle) * targetDistance - targetDistance * 0.5;
+                    
+                    const lookTarget = new THREE.Vector3(lookX, lookY, lookZ);
+                    const currentLook = new THREE.Vector3();
+                    planeGroup.getWorldDirection(currentLook);
+                    
+                    const targetDir = lookTarget.sub(planeGroup.position).normalize();
+                    planeGroup.lookAt(planeGroup.position.clone().add(targetDir));
+                    
+                    // Add slight roll
+                    planeGroup.rotation.z = Math.sin(orbitAngle) * 0.3;
                     break;
-                }
 
                 case PlaneState.CONTROLLED:
                     if (handDetected && gestureType === 'pointing') {
-                        const targetX = smoothedHandX * 6;
-                        const targetY = smoothedHandY * 5;
-                        const targetZ = -6;
-
-                        planeVelocity.x += (targetX - planeGroup.position.x) * 0.004;
-                        planeVelocity.y += (targetY - planeGroup.position.y) * 0.004;
-                        planeVelocity.z += (targetZ - planeGroup.position.z) * 0.003;
-
-                        planeGroup.position.add(planeVelocity);
-
-                        planeVelocity.multiplyScalar(0.96);
-                        planeVelocity.y += 0.0003;
-
-                        const dir = new THREE.Vector3(
-                            targetX - planeGroup.position.x,
-                            targetY - planeGroup.position.y,
-                            targetZ - planeGroup.position.z
+                        // Smoothly guide plane toward hand direction
+                        const targetControlX = smoothedHandX * 6;
+                        const targetControlY = smoothedHandY * 5;
+                        
+                        planeGroup.position.x += (targetControlX - planeGroup.position.x) * 0.08;
+                        planeGroup.position.y += (targetControlY - planeGroup.position.y) * 0.08;
+                        
+                        // Maintain forward motion
+                        planeGroup.position.z += ((-targetDistance * 0.5) - planeGroup.position.z) * 0.05;
+                        
+                        // Look at direction of movement
+                        const moveDir = new THREE.Vector3(
+                            targetControlX - planeGroup.position.x,
+                            targetControlY - planeGroup.position.y,
+                            -0.5
                         ).normalize();
-
+                        
                         const targetQuat = new THREE.Quaternion();
                         const lookMatrix = new THREE.Matrix4();
-                        lookMatrix.lookAt(
-                            new THREE.Vector3(0, 0, 0),
-                            dir,
-                            new THREE.Vector3(0, 1, 0)
-                        );
+                        lookMatrix.lookAt(planeGroup.position, planeGroup.position.clone().add(moveDir), new THREE.Vector3(0, 1, 0));
                         targetQuat.setFromRotationMatrix(lookMatrix);
                         planeGroup.quaternion.slerp(targetQuat, 0.1);
-
-                        planeGroup.position.x = Math.max(-bounds.x, Math.min(bounds.x, planeGroup.position.x));
-                        planeGroup.position.y = Math.max(-bounds.y, Math.min(bounds.y, planeGroup.position.y));
-                        planeGroup.position.z = Math.max(bounds.zMin, Math.min(bounds.zMax, planeGroup.position.z));
                     }
-                    previousPosition.copy(planeGroup.position);
                     break;
 
-                case PlaneState.TRICK: {
-                    const { lookRotationZ, bankOffset } = updateBoomerangOrbit();
-                    const elapsed = Math.min((performance.now() - trickStartTime) / 1500, 1);
-                    planeGroup.rotation.z = lookRotationZ + bankOffset + elapsed * Math.PI * 4;
+                case PlaneState.TRICK:
+                    // Barrel roll animation
+                    const trickProgress = (Date.now() % 1500) / 1500;
+                    planeGroup.rotation.z = trickProgress * Math.PI * 4;
+                    
+                    // Continue orbiting during trick
+                    orbitAngle += orbitSpeed;
+                    planeGroup.position.x = Math.cos(orbitAngle) * targetDistance;
+                    planeGroup.position.y = Math.sin(orbitAngle * 0.7) * (targetDistance * 0.3);
+                    planeGroup.position.z = Math.sin(orbitAngle) * targetDistance - targetDistance * 0.5;
                     break;
-                }
             }
 
-            // Update trail
-            if (currentState === PlaneState.FLYING || 
+            // Update trail for all states except IDLE and DRAGGING
+            if (currentState === PlaneState.ORBITING || 
                 currentState === PlaneState.CONTROLLED || 
                 currentState === PlaneState.TRICK) {
                 trailPoints.push(planeGroup.position.clone());

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "http-server -p 5173 -c-1 .",
     "preview": "http-server -p 4173 -c-1 .",
-    "format": "npx prettier@latest --check paper-plane-ar_10.html"
+    "format": "npx prettier@latest --check paper-plane-ar_9.html"
   },
   "devDependencies": {
     "http-server": "^14.1.1"
