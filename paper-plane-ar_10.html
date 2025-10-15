@@ -87,11 +87,28 @@
             opacity: 1;
         }
 
-        .record-btn {
+        .gesture-icon {
+            font-size: 18px;
+            display: inline-flex;
+        }
+
+        .action-bar {
             position: absolute;
             bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .record-btn,
+        .action-btn {
+            position: relative;
+            bottom: auto;
+            left: auto;
+            transform: none;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(20px);
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -111,7 +128,7 @@
 
         .record-btn:hover {
             background: rgba(255, 255, 255, 0.25);
-            transform: translateX(-50%) scale(1.05);
+            transform: scale(1.05);
         }
 
         .record-btn.recording {
@@ -133,6 +150,50 @@
             height: 12px;
             background: #ef4444;
             border-radius: 50%;
+        }
+
+        .action-btn {
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        .icon-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon-btn:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.08);
+        }
+
+        .icon-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .help-btn {
@@ -184,7 +245,7 @@
         }
 
         .controls-content {
-            background: rgba(40, 40, 40, 0.95);
+            background: rgba(24, 24, 24, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 24px;
             padding: 32px;
@@ -238,15 +299,22 @@
             align-items: center;
             gap: 16px;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 12px;
             margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: border 0.2s ease, background 0.2s ease;
+        }
+
+        .control-item.highlight {
+            border-color: rgba(255, 255, 255, 0.24);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
         }
 
         .control-emoji {
-            font-size: 32px;
-            width: 48px;
+            font-size: 28px;
+            width: 44px;
             text-align: center;
         }
 
@@ -331,15 +399,15 @@
         <div class="controls-content">
             <div class="controls-header">
                 <div class="controls-title">
-                    ✋ Gesture Controls
+                    🖐️ Gesture Controls
                 </div>
                 <button class="close-btn" id="closeBtn">
                     <i data-lucide="x" size="20"></i>
                 </button>
             </div>
 
-            <div class="control-item">
-                <div class="control-emoji"><i data-lucide="move" size="28"></i></div>
+            <div class="control-item highlight">
+                <div class="control-emoji">🤏</div>
                 <div class="control-text">
                     <strong>Pinch</strong>
                     <span>Drag plane anywhere</span>
@@ -347,7 +415,7 @@
             </div>
 
             <div class="control-item">
-                <div class="control-emoji"><i data-lucide="navigation" size="28"></i></div>
+                <div class="control-emoji">☝️</div>
                 <div class="control-text">
                     <strong>Point (Index Finger)</strong>
                     <span>Guide plane direction smoothly</span>
@@ -355,7 +423,7 @@
             </div>
 
             <div class="control-item">
-                <div class="control-emoji"><i data-lucide="hand" size="28"></i></div>
+                <div class="control-emoji">✌️</div>
                 <div class="control-text">
                     <strong>Peace Sign</strong>
                     <span>Barrel roll trick</span>
@@ -363,27 +431,38 @@
             </div>
 
             <div class="control-item">
-                <div class="control-emoji"><i data-lucide="zoom-out" size="28"></i></div>
+                <div class="control-emoji">🖐️</div>
                 <div class="control-text">
                     <strong>Open Palm</strong>
-                    <span>Slow down plane</span>
+                    <span>Zoom out (increase orbit)</span>
                 </div>
             </div>
 
             <div class="control-item">
-                <div class="control-emoji"><i data-lucide="zoom-in" size="28"></i></div>
+                <div class="control-emoji">✊</div>
                 <div class="control-text">
                     <strong>Fist</strong>
-                    <span>Speed up plane</span>
+                    <span>Zoom in (decrease orbit)</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <button class="record-btn" id="recordBtn">
-        <div class="rec-dot"></div>
-        <span>Record</span>
-    </button>
+    <div class="action-bar">
+        <button class="action-btn" id="homeBtn">
+            <i data-lucide="rotate-ccw" size="20"></i>
+            <span>Reset</span>
+        </button>
+
+        <button class="record-btn" id="recordBtn">
+            <div class="rec-dot"></div>
+            <span>Record</span>
+        </button>
+
+        <button class="icon-btn" id="cameraToggleBtn" aria-label="Switch camera">
+            <i data-lucide="camera" size="22"></i>
+        </button>
+    </div>
 
     <script type="module">
         // Three.js Setup
@@ -460,6 +539,17 @@
 
         createPaperPlane();
 
+        planeGroup.position.set(0, 0.2, -4.5);
+
+        let previousPosition = planeGroup.position.clone();
+        const boomerangBaseZ = -5.2;
+        let boomerangAngle = Math.PI / 2;
+        let boomerangRadius = 4.2;
+        let boomerangDepth = 3.4;
+        let boomerangSpeed = 0.02;
+        let boomerangDirection = 1;
+        let trickStartTime = 0;
+
         // Plane States
         const PlaneState = {
             IDLE: 'idle',
@@ -471,65 +561,165 @@
 
         let currentState = PlaneState.IDLE;
         let planeVelocity = new THREE.Vector3(0, 0, 0);
-        let targetDirection = new THREE.Vector3(0, 0, -1);
         let smoothedHandX = 0;
         let smoothedHandY = 0;
-        let planeRotation = new THREE.Euler(0, 0, 0);
 
         // Gesture display
-        function updateGestureDisplay(gesture, progress = null) {
+        function updateGestureDisplay(gesture) {
             const indicator = document.getElementById('gestureIndicator');
             let icon = '';
             let text = '';
             let stateText = '';
 
-            switch(gesture) {
+            switch (gesture) {
                 case 'pinch':
-                    icon = '<i data-lucide="move" size="16"></i>';
-                    text = 'Dragging';
+                    icon = '🤏';
+                    text = 'Drag mode';
                     break;
                 case 'pointing':
-                    icon = '<i data-lucide="navigation" size="16"></i>';
-                    text = 'Directing';
+                    icon = '☝️';
+                    text = 'Manual guidance';
                     break;
                 case 'peace':
-                    icon = '<i data-lucide="rotate-cw" size="16"></i>';
-                    text = 'Trick Mode';
+                    icon = '✌️';
+                    text = 'Trick queued';
                     break;
                 case 'open_palm':
-                    icon = '<i data-lucide="zoom-out" size="16"></i>';
-                    text = 'Zoom Out';
+                    icon = '🖐️';
+                    text = 'Orbit widening';
                     break;
                 case 'fist':
-                    icon = '<i data-lucide="zoom-in" size="16"></i>';
-                    text = 'Zoom In';
+                    icon = '✊';
+                    text = 'Orbit tightening';
                     break;
                 default:
+                    icon = '';
                     text = '';
             }
 
-            switch(currentState) {
+            switch (currentState) {
                 case PlaneState.FLYING:
-                    stateText = '<span style="opacity: 0.6; margin-left: 4px;">• On flight</span>';
+                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Boomerang</span>';
                     break;
                 case PlaneState.CONTROLLED:
-                    stateText = '<span style="opacity: 0.6; margin-left: 4px;">• Manual</span>';
+                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Manual</span>';
                     break;
                 case PlaneState.TRICK:
-                    stateText = '<span style="opacity: 0.6; margin-left: 4px;">• Trick</span>';
+                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Trick</span>';
                     break;
                 case PlaneState.DRAGGING:
-                    stateText = '';
+                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Drag</span>';
+                    break;
+                case PlaneState.IDLE:
+                    stateText = '<span style="opacity: 0.6; margin-left: 6px;">• Idle</span>';
                     break;
             }
 
-            if (text || stateText) {
-                indicator.innerHTML = icon + text + stateText;
+            if (icon || text || stateText) {
+                const parts = [];
+                if (icon) {
+                    parts.push(`<span class="gesture-icon">${icon}</span>`);
+                }
+                if (text) {
+                    parts.push(`<span>${text}</span>`);
+                }
+                if (stateText) {
+                    parts.push(stateText);
+                }
+                indicator.innerHTML = parts.join('');
                 indicator.classList.add('show');
-                lucide.createIcons();
             } else {
                 indicator.classList.remove('show');
             }
+        }
+
+        function syncBoomerangToPlane() {
+            boomerangAngle = Math.atan2(
+                planeGroup.position.z - boomerangBaseZ,
+                planeGroup.position.x
+            );
+            if (boomerangAngle < 0) {
+                boomerangAngle += Math.PI * 2;
+            }
+            previousPosition.copy(planeGroup.position.clone());
+        }
+
+        function resetExperience(showPrompt = false) {
+            currentState = PlaneState.IDLE;
+            planeVelocity.set(0, 0, 0);
+            planeGroup.position.set(0, 0.2, -4.5);
+            planeGroup.rotation.set(0, 0, 0);
+            boomerangAngle = Math.PI / 2;
+            boomerangRadius = 4.2;
+            boomerangDepth = 3.4;
+            boomerangSpeed = 0.02;
+            boomerangDirection = 1;
+            previousPosition.copy(planeGroup.position);
+            trailPoints.length = 0;
+            gestureType = 'none';
+            lastGesture = 'none';
+            updateGestureDisplay('none');
+            if (showPrompt) {
+                showIndicator('Back to start');
+            }
+        }
+
+        function prepareBoomerangLaunch() {
+            boomerangRadius = THREE.MathUtils.randFloat(3.6, 5.4);
+            boomerangDepth = THREE.MathUtils.randFloat(2.8, 4.8);
+            boomerangSpeed = THREE.MathUtils.randFloat(0.018, 0.026);
+            boomerangDirection = Math.random() > 0.5 ? 1 : -1;
+            const frontAnchor = boomerangDirection > 0 ? Math.PI / 2 : (3 * Math.PI) / 2;
+            boomerangAngle = frontAnchor + (Math.random() - 0.5) * 0.4;
+            const startRadius = boomerangRadius + Math.sin(boomerangAngle * 1.4) * 1.1;
+            const startX = Math.cos(boomerangAngle) * startRadius;
+            const startY = Math.sin(boomerangAngle * 1.8) * 1.2;
+            const startZ = boomerangBaseZ + Math.sin(boomerangAngle) * boomerangDepth;
+            planeGroup.position.set(startX, startY, startZ);
+            previousPosition.copy(planeGroup.position);
+            syncBoomerangToPlane();
+        }
+
+        function adjustOrbit(delta) {
+            boomerangRadius = THREE.MathUtils.clamp(boomerangRadius + delta, 3, 6.8);
+            boomerangDepth = THREE.MathUtils.clamp(boomerangDepth + delta * 0.8, 2.4, 5.6);
+        }
+
+        function updateBoomerangOrbit() {
+            boomerangAngle += boomerangSpeed * boomerangDirection;
+            if (boomerangAngle > Math.PI * 2) {
+                boomerangAngle -= Math.PI * 2;
+                boomerangDirection *= -1;
+            } else if (boomerangAngle < 0) {
+                boomerangAngle += Math.PI * 2;
+                boomerangDirection *= -1;
+            }
+
+            const radiusOffset = Math.sin(boomerangAngle * 1.4) * 1.1;
+            const targetRadius = boomerangRadius + radiusOffset;
+            const targetPos = new THREE.Vector3(
+                Math.cos(boomerangAngle) * targetRadius,
+                Math.sin(boomerangAngle * 1.8) * 1.25,
+                boomerangBaseZ + Math.sin(boomerangAngle) * boomerangDepth
+            );
+
+            const lerpFactor = 0.12 + Math.min(boomerangSpeed * 3, 0.2);
+            const newPos = planeGroup.position.clone().lerp(targetPos, lerpFactor);
+            planeVelocity.copy(newPos.clone().sub(previousPosition));
+            previousPosition.copy(newPos);
+            planeGroup.position.copy(newPos);
+
+            const lookAheadAngle = boomerangAngle + 0.22 * boomerangDirection;
+            const lookAheadRadius = boomerangRadius + Math.sin(lookAheadAngle * 1.4) * 1.1;
+            const lookTarget = new THREE.Vector3(
+                Math.cos(lookAheadAngle) * lookAheadRadius,
+                Math.sin(lookAheadAngle * 1.8) * 1.25,
+                boomerangBaseZ + Math.sin(lookAheadAngle) * boomerangDepth
+            );
+            planeGroup.lookAt(lookTarget);
+            const lookRotationZ = planeGroup.rotation.z;
+            const bankOffset = THREE.MathUtils.clamp(-planeVelocity.x * 4, -0.7, 0.7);
+            return { lookRotationZ, bankOffset };
         }
 
         // Trail System
@@ -548,7 +738,7 @@
         function updateTrail() {
             if (currentState === PlaneState.FLYING || 
                 currentState === PlaneState.CONTROLLED ||
-                currentState === PlaneState.LOOPING) {
+                currentState === PlaneState.TRICK) {
                 trailPoints.push(planeGroup.position.clone());
             }
             
@@ -669,17 +859,24 @@
                 // Pinch - enter drag mode
                 if (gestureType === 'pinch' && currentState !== PlaneState.DRAGGING) {
                     currentState = PlaneState.DRAGGING;
+                    updateGestureDisplay(gestureType);
                 } else if (gestureType !== 'pinch' && currentState === PlaneState.DRAGGING) {
                     currentState = PlaneState.FLYING;
+                    syncBoomerangToPlane();
+                    updateGestureDisplay(gestureType);
                 }
                 
                 // Pointing - enter controlled mode
                 if (gestureType === 'pointing') {
                     if (currentState === PlaneState.FLYING) {
                         currentState = PlaneState.CONTROLLED;
+                        planeVelocity.set(0, 0, 0);
+                        updateGestureDisplay(gestureType);
                     }
                 } else if (currentState === PlaneState.CONTROLLED && gestureType !== 'pointing') {
                     currentState = PlaneState.FLYING;
+                    syncBoomerangToPlane();
+                    updateGestureDisplay(gestureType);
                 }
                 
                 // Peace - trick
@@ -691,34 +888,36 @@
                 
                 // Open palm - zoom out
                 if (gestureType === 'open_palm') {
-                    planeVelocity.multiplyScalar(0.95); // Slow down
+                    adjustOrbit(0.03);
                 }
                 
-                // Fist - zoom in
                 if (gestureType === 'fist') {
-                    const speedBoost = 1.05;
-                    planeVelocity.multiplyScalar(Math.min(speedBoost, 2));
+                    adjustOrbit(-0.03);
                 }
                 
                 lastGesture = gestureType;
             } else {
                 handDetected = false;
                 gestureType = 'none';
-                updateGestureDisplay('none');
                 if (currentState === PlaneState.DRAGGING || currentState === PlaneState.CONTROLLED) {
-                    if (currentState !== PlaneState.IDLE) {
-                        currentState = PlaneState.FLYING;
-                    }
+                    currentState = PlaneState.FLYING;
+                    syncBoomerangToPlane();
                 }
+                updateGestureDisplay('none');
+                lastGesture = 'none';
             }
         }
 
         function doTrick() {
             currentState = PlaneState.TRICK;
+            trickStartTime = performance.now();
             showIndicator('Barrel Roll!');
+            updateGestureDisplay('peace');
             setTimeout(() => {
                 if (currentState === PlaneState.TRICK) {
                     currentState = PlaneState.FLYING;
+                    syncBoomerangToPlane();
+                    updateGestureDisplay(gestureType);
                 }
             }, 1500);
         }
@@ -737,27 +936,95 @@
         }
 
         // Camera Setup
-        const cameraInstance = new Camera(videoElement, {
-            onFrame: async () => {
-                await hands.send({ image: videoElement });
-            },
-            width: 1280,
-            height: 720
-        });
-        
-        cameraInstance.start().then(() => {
-            document.getElementById('loading').style.display = 'none';
-        }).catch((err) => {
-            console.error('Camera error:', err);
-            document.getElementById('loading').innerHTML = `
-                <div style="color: #ef4444; text-align: center;">
-                    <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
-                    <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
-                    <div style="font-size: 14px; opacity: 0.8;">Please allow camera access to use this app</div>
-                    <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
-                </div>
-            `;
-        });
+        let cameraInstance = null;
+        let availableCameras = [];
+        let currentCameraIndex = 0;
+        const cameraToggleBtn = document.getElementById('cameraToggleBtn');
+        if (cameraToggleBtn) {
+            cameraToggleBtn.disabled = true;
+            cameraToggleBtn.classList.add('disabled');
+        }
+
+        async function loadAvailableCameras() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                return;
+            }
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                availableCameras = devices.filter((device) => device.kind === 'videoinput');
+                if (cameraToggleBtn) {
+                    const hasMultiple = availableCameras.length > 1;
+                    cameraToggleBtn.disabled = !hasMultiple;
+                    cameraToggleBtn.classList.toggle('disabled', !hasMultiple);
+                }
+            } catch (err) {
+                console.warn('Camera enumeration failed:', err);
+            }
+        }
+
+        async function stopActiveCamera() {
+            if (cameraInstance && cameraInstance.stop) {
+                try {
+                    await cameraInstance.stop();
+                } catch (err) {
+                    console.warn('Camera stop failed:', err);
+                }
+            }
+            if (videoElement.srcObject) {
+                videoElement.srcObject.getTracks().forEach((track) => track.stop());
+                videoElement.srcObject = null;
+            }
+        }
+
+        async function startCamera(deviceId) {
+            await stopActiveCamera();
+            cameraInstance = new Camera(videoElement, {
+                onFrame: async () => {
+                    await hands.send({ image: videoElement });
+                },
+                width: 1280,
+                height: 720,
+                deviceId: deviceId || undefined
+            });
+            try {
+                await cameraInstance.start();
+                document.getElementById('loading').style.display = 'none';
+                await loadAvailableCameras();
+                if (deviceId) {
+                    const foundIndex = availableCameras.findIndex((cam) => cam.deviceId === deviceId);
+                    if (foundIndex >= 0) {
+                        currentCameraIndex = foundIndex;
+                    }
+                }
+            } catch (err) {
+                console.error('Camera error:', err);
+                document.getElementById('loading').innerHTML = `
+                    <div style="color: #ef4444; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
+                        <div style="font-size: 18px; margin-bottom: 8px;">Camera Access Required</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Please allow camera access to use this app</div>
+                        <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; background: white; color: black; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        if (cameraToggleBtn) {
+            cameraToggleBtn.addEventListener('click', async () => {
+                if (availableCameras.length < 2 || cameraToggleBtn.disabled) {
+                    return;
+                }
+                cameraToggleBtn.disabled = true;
+                cameraToggleBtn.classList.add('disabled');
+                currentCameraIndex = (currentCameraIndex + 1) % availableCameras.length;
+                await startCamera(availableCameras[currentCameraIndex].deviceId);
+                const hasMultiple = availableCameras.length > 1;
+                cameraToggleBtn.disabled = !hasMultiple;
+                cameraToggleBtn.classList.toggle('disabled', !hasMultiple);
+            });
+        }
+
+        startCamera();
 
         // UI Controls
         document.getElementById('helpBtn').addEventListener('click', () => {
@@ -766,24 +1033,24 @@
 
         document.getElementById('launchBtn').addEventListener('click', () => {
             if (currentState === PlaneState.IDLE || currentState === PlaneState.DRAGGING) {
+                prepareBoomerangLaunch();
+                planeVelocity.set(0, 0, 0);
                 currentState = PlaneState.FLYING;
-                // Give initial velocity
-                planeVelocity.set(
-                    (Math.random() - 0.5) * 0.05,
-                    0.03,
-                    -0.15
-                );
-                showIndicator('Plane launched!');
+                trailPoints.length = 0;
+                updateGestureDisplay(gestureType);
+                showIndicator('Boomerang flight engaged');
             }
         });
 
         document.getElementById('landBtn').addEventListener('click', () => {
             if (currentState !== PlaneState.IDLE) {
-                currentState = PlaneState.IDLE;
-                planeVelocity.set(0, 0, 0);
-                trailPoints.length = 0;
+                resetExperience(false);
                 showIndicator('Plane landed');
             }
+        });
+
+        document.getElementById('homeBtn').addEventListener('click', () => {
+            resetExperience(true);
         });
 
         document.getElementById('closeBtn').addEventListener('click', () => {
@@ -902,115 +1169,51 @@
 
             switch(currentState) {
                 case PlaneState.IDLE:
-                    // Gentle idle animation at current position
                     planeGroup.rotation.y = Math.sin(time * 2) * 0.1;
                     planeGroup.rotation.z = Math.cos(time * 0.7) * 0.05;
+                    planeVelocity.set(0, 0, 0);
+                    previousPosition.copy(planeGroup.position);
                     trailPoints.length = 0;
                     break;
 
                 case PlaneState.DRAGGING:
                     if (handDetected && gestureType === 'pinch') {
-                        // Follow hand exactly
                         planeGroup.position.x = smoothedHandX * 4;
                         planeGroup.position.y = smoothedHandY * 3;
                         planeGroup.position.z = handZ * -10;
+                        previousPosition.copy(planeGroup.position);
+                        planeVelocity.set(0, 0, 0);
                     }
                     trailPoints.length = 0;
                     break;
 
-                case PlaneState.FLYING:
-                    // Natural paper plane physics
-                    planeGroup.position.add(planeVelocity);
-                    
-                    // Gravity
-                    planeVelocity.y -= 0.0008;
-                    
-                    // Air resistance
-                    planeVelocity.multiplyScalar(0.997);
-                    
-                    // Lift - paper planes glide
-                    if (planeVelocity.length() > 0.01) {
-                        planeVelocity.y += 0.0004;
-                    }
-                    
-                    // Gentle turning
-                    if (Math.abs(planeVelocity.x) > 0.001) {
-                        planeVelocity.y += planeVelocity.x * 0.02;
-                    }
-                    
-                    // Point in direction of movement
-                    if (planeVelocity.length() > 0.001) {
-                        const targetQuat = new THREE.Quaternion();
-                        const lookDir = planeVelocity.clone().normalize();
-                        const lookMatrix = new THREE.Matrix4();
-                        lookMatrix.lookAt(
-                            new THREE.Vector3(0, 0, 0),
-                            lookDir,
-                            new THREE.Vector3(0, 1, 0)
-                        );
-                        targetQuat.setFromRotationMatrix(lookMatrix);
-                        planeGroup.quaternion.slerp(targetQuat, 0.05);
-                    }
-                    
-                    // Banking based on horizontal movement
-                    planeGroup.rotation.z = -planeVelocity.x * 3;
-                    
-                    // Keep in bounds with smooth bounce
-                    if (planeGroup.position.x > bounds.x) {
-                        planeGroup.position.x = bounds.x;
-                        planeVelocity.x = -Math.abs(planeVelocity.x) * 0.6;
-                    }
-                    if (planeGroup.position.x < -bounds.x) {
-                        planeGroup.position.x = -bounds.x;
-                        planeVelocity.x = Math.abs(planeVelocity.x) * 0.6;
-                    }
-                    if (planeGroup.position.y > bounds.y) {
-                        planeGroup.position.y = bounds.y;
-                        planeVelocity.y = -Math.abs(planeVelocity.y) * 0.5;
-                    }
-                    if (planeGroup.position.y < -bounds.y) {
-                        planeGroup.position.y = -bounds.y;
-                        planeVelocity.y = Math.abs(planeVelocity.y) * 0.7;
-                    }
-                    if (planeGroup.position.z < bounds.zMin) {
-                        planeGroup.position.z = bounds.zMin;
-                        planeVelocity.z = Math.abs(planeVelocity.z) * 0.6;
-                    }
-                    if (planeGroup.position.z > bounds.zMax) {
-                        planeGroup.position.z = bounds.zMax;
-                        planeVelocity.z = -Math.abs(planeVelocity.z) * 0.6;
-                    }
-                    
-                    // If too slow, add gentle push to keep flying
-                    if (planeVelocity.length() < 0.02) {
-                        planeVelocity.z -= 0.005;
-                        planeVelocity.y += 0.002;
-                    }
+                case PlaneState.FLYING: {
+                    const { lookRotationZ, bankOffset } = updateBoomerangOrbit();
+                    planeGroup.rotation.z = lookRotationZ + bankOffset;
                     break;
+                }
 
                 case PlaneState.CONTROLLED:
                     if (handDetected && gestureType === 'pointing') {
-                        // Smoothly guide toward hand
                         const targetX = smoothedHandX * 6;
                         const targetY = smoothedHandY * 5;
-                        
-                        planeVelocity.x += (targetX - planeGroup.position.x) * 0.005;
-                        planeVelocity.y += (targetY - planeGroup.position.y) * 0.005;
-                        
+                        const targetZ = -6;
+
+                        planeVelocity.x += (targetX - planeGroup.position.x) * 0.004;
+                        planeVelocity.y += (targetY - planeGroup.position.y) * 0.004;
+                        planeVelocity.z += (targetZ - planeGroup.position.z) * 0.003;
+
                         planeGroup.position.add(planeVelocity);
-                        
-                        // Apply physics
-                        planeVelocity.y -= 0.0005;
-                        planeVelocity.multiplyScalar(0.98);
-                        planeVelocity.y += 0.0003; // Lift
-                        
-                        // Point at target
+
+                        planeVelocity.multiplyScalar(0.96);
+                        planeVelocity.y += 0.0003;
+
                         const dir = new THREE.Vector3(
                             targetX - planeGroup.position.x,
                             targetY - planeGroup.position.y,
-                            -0.5
+                            targetZ - planeGroup.position.z
                         ).normalize();
-                        
+
                         const targetQuat = new THREE.Quaternion();
                         const lookMatrix = new THREE.Matrix4();
                         lookMatrix.lookAt(
@@ -1019,25 +1222,21 @@
                             new THREE.Vector3(0, 1, 0)
                         );
                         targetQuat.setFromRotationMatrix(lookMatrix);
-                        planeGroup.quaternion.slerp(targetQuat, 0.08);
-                        
-                        // Keep in bounds
+                        planeGroup.quaternion.slerp(targetQuat, 0.1);
+
                         planeGroup.position.x = Math.max(-bounds.x, Math.min(bounds.x, planeGroup.position.x));
                         planeGroup.position.y = Math.max(-bounds.y, Math.min(bounds.y, planeGroup.position.y));
                         planeGroup.position.z = Math.max(bounds.zMin, Math.min(bounds.zMax, planeGroup.position.z));
                     }
+                    previousPosition.copy(planeGroup.position);
                     break;
 
-                case PlaneState.TRICK:
-                    // Barrel roll while maintaining flight
-                    const trickProgress = (Date.now() % 1500) / 1500;
-                    planeGroup.rotation.z = trickProgress * Math.PI * 4;
-                    
-                    // Continue flying
-                    planeGroup.position.add(planeVelocity);
-                    planeVelocity.y -= 0.0005;
-                    planeVelocity.multiplyScalar(0.998);
+                case PlaneState.TRICK: {
+                    const { lookRotationZ, bankOffset } = updateBoomerangOrbit();
+                    const elapsed = Math.min((performance.now() - trickStartTime) / 1500, 1);
+                    planeGroup.rotation.z = lookRotationZ + bankOffset + elapsed * Math.PI * 4;
                     break;
+                }
             }
 
             // Update trail
